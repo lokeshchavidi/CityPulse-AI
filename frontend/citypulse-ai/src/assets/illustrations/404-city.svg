@@ -1,0 +1,40 @@
+<svg viewBox="0 0 1000 562" xmlns="http://www.w3.org/2000/svg">
+  <!-- Skyline background -->
+  <g opacity="0.6">
+    <rect x="80" y="330" width="60" height="140" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="2" rx="4"/>
+    <rect x="150" y="290" width="70" height="180" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="2" rx="4"/>
+    <rect x="800" y="310" width="60" height="160" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="2" rx="4"/>
+    <rect x="870" y="350" width="55" height="120" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="2" rx="4"/>
+  </g>
+  <line x1="60" y1="470" x2="940" y2="470" stroke="#E2E8F0" stroke-width="2"/>
+
+  <!-- Digital map with broken path -->
+  <g transform="translate(300,300)">
+    <rect x="0" y="0" width="180" height="130" rx="10" fill="#FFFFFF" stroke="#1E3A8A" stroke-width="2"/>
+    <path d="M20 100 L60 60 L90 80 L130 30" fill="none" stroke="#E2E8F0" stroke-width="2" stroke-dasharray="6 6"/>
+    <path d="M20 100 a10 10 0 1 1 0.01 0z" fill="#2563EB"/>
+    <path d="M130 30 a10 10 0 1 1 0.01 0z" fill="#0F766E"/>
+    <circle cx="90" cy="55" r="14" fill="none" stroke="#1E3A8A" stroke-width="2" stroke-dasharray="3 5"/>
+  </g>
+
+  <!-- Friendly lost robot (geometric, professional) -->
+  <g transform="translate(600,260)">
+    <rect x="-30" y="0" width="60" height="60" rx="10" fill="#FFFFFF" stroke="#1E3A8A" stroke-width="2"/>
+    <circle cx="-12" cy="26" r="6" fill="#2563EB"/>
+    <circle cx="12" cy="26" r="6" fill="#2563EB"/>
+    <path d="M-10 44 h20" stroke="#0F766E" stroke-width="2" stroke-linecap="round"/>
+    <line x1="0" y1="0" x2="0" y2="-18" stroke="#1E3A8A" stroke-width="2"/>
+    <circle cx="0" cy="-24" r="6" fill="#0F766E"/>
+    <rect x="-44" y="66" width="20" height="34" rx="6" fill="#FFFFFF" stroke="#1E3A8A" stroke-width="2"/>
+    <rect x="24" y="66" width="20" height="34" rx="6" fill="#FFFFFF" stroke="#1E3A8A" stroke-width="2"/>
+    <!-- question mark aura -->
+    <path d="M60 -10 q10 -14 22 -4 q6 8 -4 14 q-6 4 -6 10" fill="none" stroke="#2563EB" stroke-width="3" stroke-linecap="round"/>
+    <circle cx="72" cy="22" r="2.5" fill="#2563EB"/>
+  </g>
+
+  <!-- Location pin with X (missing) -->
+  <g transform="translate(500,150)">
+    <path d="M0 0 a22 22 0 1 1 0.01 0z" fill="#FFFFFF" stroke="#1E3A8A" stroke-width="2"/>
+    <path d="M-8 -12 l16 16 M8 -12 l-16 16" stroke="#1E3A8A" stroke-width="2.5" stroke-linecap="round"/>
+  </g>
+</svg>

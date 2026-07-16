@@ -1,0 +1,44 @@
+<svg viewBox="0 0 1000 562" xmlns="http://www.w3.org/2000/svg">
+  <!-- Large central shield -->
+  <g transform="translate(500,270)">
+    <path d="M0 -150 L110 -108 V-10 C110 78 60 145 0 168 C-60 145 -110 78 -110 -10 V-108 Z"
+          fill="#FFFFFF" stroke="#1E3A8A" stroke-width="3"/>
+    <!-- lock inside -->
+    <rect x="-24" y="-10" width="48" height="38" rx="6" fill="none" stroke="#0F766E" stroke-width="3"/>
+    <path d="M-14 -10 v-14 a14 14 0 0 1 28 0 v14" fill="none" stroke="#0F766E" stroke-width="3"/>
+    <circle cx="0" cy="8" r="4" fill="#0F766E"/>
+  </g>
+
+  <!-- Orbiting encrypted data nodes -->
+  <g fill="none" stroke="#2563EB" stroke-width="2" stroke-dasharray="3 6">
+    <circle cx="500" cy="270" r="200"/>
+  </g>
+  <g fill="#2563EB">
+    <circle cx="500" cy="70" r="8"/>
+    <circle cx="670" cy="180" r="8"/>
+    <circle cx="670" cy="360" r="8"/>
+    <circle cx="330" cy="180" r="8"/>
+    <circle cx="330" cy="360" r="8"/>
+  </g>
+
+  <!-- Data packet chips near nodes -->
+  <g transform="translate(680,150)">
+    <rect x="0" y="0" width="70" height="46" rx="10" fill="#FFFFFF" stroke="#0F766E" stroke-width="2"/>
+    <rect x="12" y="14" width="46" height="6" rx="3" fill="#E2E8F0"/>
+    <rect x="12" y="26" width="30" height="5" rx="2.5" fill="#E2E8F0"/>
+  </g>
+  <g transform="translate(250,340)">
+    <rect x="0" y="0" width="70" height="46" rx="10" fill="#FFFFFF" stroke="#1E3A8A" stroke-width="2"/>
+    <rect x="12" y="14" width="46" height="6" rx="3" fill="#E2E8F0"/>
+    <rect x="12" y="26" width="30" height="5" rx="2.5" fill="#E2E8F0"/>
+  </g>
+
+  <!-- AI protection glyph -->
+  <g transform="translate(500,90)" stroke="#2563EB" stroke-width="1.5" fill="#2563EB">
+    <circle cx="0" cy="0" r="5"/>
+    <circle cx="-16" cy="10" r="3"/>
+    <circle cx="16" cy="10" r="3"/>
+    <line x1="0" y1="0" x2="-16" y2="10" stroke-width="1.2"/>
+    <line x1="0" y1="0" x2="16" y2="10" stroke-width="1.2"/>
+  </g>
+</svg>

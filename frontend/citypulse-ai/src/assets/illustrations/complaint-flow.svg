@@ -1,0 +1,85 @@
+<svg viewBox="0 0 1000 562" xmlns="http://www.w3.org/2000/svg">
+  <!-- Horizontal workflow: Citizen -> Upload -> AI -> Department -> Officer -> Resolution -> Notify -->
+  <line x1="90" y1="281" x2="910" y2="281" stroke="#E2E8F0" stroke-width="3"/>
+
+  <!-- Step 1: Citizen -->
+  <g transform="translate(90,220)">
+    <circle cx="0" cy="0" r="34" fill="#FFFFFF" stroke="#1E3A8A" stroke-width="2"/>
+    <circle cx="0" cy="-8" r="9" fill="#1E3A8A"/>
+    <path d="M-14 16 q14 -20 28 0 z" fill="#2563EB"/>
+    <circle cx="0" cy="61" r="6" fill="#1E3A8A"/>
+  </g>
+
+  <!-- Step 2: Upload -->
+  <g transform="translate(230,220)">
+    <circle cx="0" cy="0" r="34" fill="#FFFFFF" stroke="#2563EB" stroke-width="2"/>
+    <rect x="-14" y="-14" width="28" height="24" rx="3" fill="none" stroke="#2563EB" stroke-width="2"/>
+    <path d="M0 -6 l0 -12 m-6 6 l6 -6 l6 6" stroke="#2563EB" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="0" cy="61" r="6" fill="#2563EB"/>
+  </g>
+
+  <!-- Step 3: AI Analysis -->
+  <g transform="translate(370,220)">
+    <circle cx="0" cy="0" r="34" fill="#FFFFFF" stroke="#0F766E" stroke-width="2"/>
+    <circle cx="0" cy="0" r="6" fill="#0F766E"/>
+    <circle cx="-14" cy="-8" r="4" fill="#0F766E"/>
+    <circle cx="14" cy="-8" r="4" fill="#0F766E"/>
+    <circle cx="0" cy="14" r="4" fill="#0F766E"/>
+    <line x1="0" y1="0" x2="-14" y2="-8" stroke="#0F766E" stroke-width="1.5"/>
+    <line x1="0" y1="0" x2="14" y2="-8" stroke="#0F766E" stroke-width="1.5"/>
+    <line x1="0" y1="0" x2="0" y2="14" stroke="#0F766E" stroke-width="1.5"/>
+    <circle cx="0" cy="61" r="6" fill="#0F766E"/>
+  </g>
+
+  <!-- Step 4: Department Assignment -->
+  <g transform="translate(510,220)">
+    <circle cx="0" cy="0" r="34" fill="#FFFFFF" stroke="#1E3A8A" stroke-width="2"/>
+    <rect x="-14" y="-4" width="28" height="18" rx="2" fill="none" stroke="#1E3A8A" stroke-width="2"/>
+    <path d="M-14 -4 l14 -10 l14 10" fill="none" stroke="#1E3A8A" stroke-width="2" stroke-linejoin="round"/>
+    <circle cx="0" cy="61" r="6" fill="#1E3A8A"/>
+  </g>
+
+  <!-- Step 5: Officer -->
+  <g transform="translate(650,220)">
+    <circle cx="0" cy="0" r="34" fill="#FFFFFF" stroke="#2563EB" stroke-width="2"/>
+    <circle cx="0" cy="-8" r="9" fill="#2563EB"/>
+    <path d="M-14 16 q14 -20 28 0 z" fill="#1E3A8A"/>
+    <path d="M-8 -8 l4 4 l8 -8" stroke="#FFFFFF" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="0" cy="61" r="6" fill="#2563EB"/>
+  </g>
+
+  <!-- Step 6: Resolution -->
+  <g transform="translate(790,220)">
+    <circle cx="0" cy="0" r="34" fill="#FFFFFF" stroke="#15803D" stroke-width="2"/>
+    <path d="M-12 0 l8 8 l16 -18" fill="none" stroke="#15803D" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="0" cy="61" r="6" fill="#15803D"/>
+  </g>
+
+  <!-- Step 7: Citizen Notification -->
+  <g transform="translate(910,220)">
+    <circle cx="0" cy="0" r="34" fill="#FFFFFF" stroke="#0F766E" stroke-width="2"/>
+    <path d="M-10 -6 a10 10 0 0 1 20 0 v8 l4 6 h-28 l4 -6 z" fill="none" stroke="#0F766E" stroke-width="2" stroke-linejoin="round"/>
+    <circle cx="0" cy="14" r="3" fill="#0F766E"/>
+  </g>
+
+  <!-- arrows between nodes -->
+  <g fill="#94A3B8">
+    <path d="M132 281 l10 -6 v12 z"/>
+    <path d="M272 281 l10 -6 v12 z"/>
+    <path d="M412 281 l10 -6 v12 z"/>
+    <path d="M552 281 l10 -6 v12 z"/>
+    <path d="M692 281 l10 -6 v12 z"/>
+    <path d="M832 281 l10 -6 v12 z"/>
+  </g>
+
+  <!-- Labels placeholder bars (no text per spec, using neutral bar to indicate label position) -->
+  <g fill="#E2E8F0">
+    <rect x="60" y="330" width="60" height="8" rx="4"/>
+    <rect x="196" y="330" width="68" height="8" rx="4"/>
+    <rect x="340" y="330" width="60" height="8" rx="4"/>
+    <rect x="470" y="330" width="80" height="8" rx="4"/>
+    <rect x="620" y="330" width="60" height="8" rx="4"/>
+    <rect x="758" y="330" width="64" height="8" rx="4"/>
+    <rect x="874" y="330" width="72" height="8" rx="4"/>
+  </g>
+</svg>

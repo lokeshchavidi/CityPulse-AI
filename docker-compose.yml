@@ -1,0 +1,82 @@
+services:
+
+  mysql:
+    image: mysql:8.0
+    container_name: citypulse-mysql
+    restart: unless-stopped
+
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-root}
+      MYSQL_DATABASE: citypulse_db
+
+    ports:
+      - "3307:3306"
+
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-p${DB_PASSWORD:-root}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build:
+      context: ./backend/CityPulse-AI
+
+    container_name: citypulse-backend
+    restart: unless-stopped
+
+    environment:
+      SERVER_PORT: 8080
+
+      DB_URL: jdbc:mysql://mysql:3306/citypulse_db
+      DB_USERNAME: root
+      DB_PASSWORD: ${DB_PASSWORD:-root}
+
+      DDL_AUTO: ${DDL_AUTO:-update}
+      SHOW_SQL: ${SHOW_SQL:-false}
+
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRATION: ${JWT_EXPIRATION:-86400000}
+
+      CLOUDINARY_CLOUD_NAME: ${CLOUDINARY_CLOUD_NAME}
+      CLOUDINARY_API_KEY: ${CLOUDINARY_API_KEY}
+      CLOUDINARY_API_SECRET: ${CLOUDINARY_API_SECRET}
+
+      GOOGLE_GENAI_API_KEY: ${GOOGLE_GENAI_API_KEY}
+      GENAI_MODEL: ${GENAI_MODEL:-gemini-2.5-flash}
+      GENAI_TEMPERATURE: ${GENAI_TEMPERATURE:-0.2}
+
+      CITYPULSE_AI_ENABLED: ${CITYPULSE_AI_ENABLED:-true}
+      CITYPULSE_AI_MODEL: ${CITYPULSE_AI_MODEL:-gemini-2.5-flash}
+      CITYPULSE_AI_TEMPERATURE: ${CITYPULSE_AI_TEMPERATURE:-0.2}
+      CITYPULSE_AI_MAX_OUTPUT_TOKENS: ${CITYPULSE_AI_MAX_OUTPUT_TOKENS:-2048}
+      CITYPULSE_AI_CONFIDENCE_THRESHOLD: ${CITYPULSE_AI_CONFIDENCE_THRESHOLD:-70}
+      CITYPULSE_AI_MAX_RETRY_ATTEMPTS: ${CITYPULSE_AI_MAX_RETRY_ATTEMPTS:-3}
+
+    ports:
+      - "8080:8080"
+
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ./frontend/citypulse-ai
+      args:
+        VITE_API_BASE_URL: ${VITE_API_BASE_URL:-/api/v1}
+
+    container_name: citypulse-frontend
+    restart: unless-stopped
+
+    ports:
+      - "3000:80"
+
+    depends_on:
+      - backend
+
+volumes:
+  mysql_data:

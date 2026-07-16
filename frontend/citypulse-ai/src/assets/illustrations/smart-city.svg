@@ -1,0 +1,137 @@
+<svg viewBox="0 0 1000 562" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .stroke{fill:none;stroke:#1E3A8A;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+      .strokeTeal{fill:none;stroke:#0F766E;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+      .dash{stroke-dasharray:4 6;}
+    </style>
+  </defs>
+
+  <!-- Ground line -->
+  <line x1="40" y1="470" x2="960" y2="470" stroke="#E2E8F0" stroke-width="2"/>
+
+  <!-- Skyline of government buildings -->
+  <g>
+    <rect x="70" y="330" width="70" height="140" rx="6" fill="#FFFFFF" stroke="#1E3A8A" stroke-width="2"/>
+    <rect x="86" y="350" width="10" height="14" rx="2" fill="#2563EB"/>
+    <rect x="106" y="350" width="10" height="14" rx="2" fill="#2563EB"/>
+    <rect x="86" y="376" width="10" height="14" rx="2" fill="#2563EB"/>
+    <rect x="106" y="376" width="10" height="14" rx="2" fill="#2563EB"/>
+    <rect x="86" y="402" width="10" height="14" rx="2" fill="#2563EB"/>
+    <rect x="106" y="402" width="10" height="14" rx="2" fill="#2563EB"/>
+
+    <rect x="150" y="270" width="90" height="200" rx="6" fill="#FFFFFF" stroke="#1E3A8A" stroke-width="2"/>
+    <rect x="170" y="292" width="12" height="16" rx="2" fill="#0F766E"/>
+    <rect x="196" y="292" width="12" height="16" rx="2" fill="#0F766E"/>
+    <rect x="170" y="322" width="12" height="16" rx="2" fill="#0F766E"/>
+    <rect x="196" y="322" width="12" height="16" rx="2" fill="#0F766E"/>
+    <rect x="170" y="352" width="12" height="16" rx="2" fill="#0F766E"/>
+    <rect x="196" y="352" width="12" height="16" rx="2" fill="#0F766E"/>
+    <rect x="170" y="382" width="12" height="16" rx="2" fill="#0F766E"/>
+    <rect x="196" y="382" width="12" height="16" rx="2" fill="#0F766E"/>
+    <!-- civic dome -->
+    <path d="M170 270 a25 25 0 0 1 50 0 z" fill="#1E3A8A"/>
+
+    <rect x="252" y="360" width="60" height="110" rx="6" fill="#FFFFFF" stroke="#1E3A8A" stroke-width="2"/>
+    <rect x="266" y="378" width="10" height="12" rx="2" fill="#2563EB"/>
+    <rect x="286" y="378" width="10" height="12" rx="2" fill="#2563EB"/>
+    <rect x="266" y="400" width="10" height="12" rx="2" fill="#2563EB"/>
+    <rect x="286" y="400" width="10" height="12" rx="2" fill="#2563EB"/>
+
+    <rect x="700" y="350" width="65" height="120" rx="6" fill="#FFFFFF" stroke="#1E3A8A" stroke-width="2"/>
+    <rect x="715" y="368" width="10" height="14" rx="2" fill="#0F766E"/>
+    <rect x="737" y="368" width="10" height="14" rx="2" fill="#0F766E"/>
+    <rect x="715" y="394" width="10" height="14" rx="2" fill="#0F766E"/>
+    <rect x="737" y="394" width="10" height="14" rx="2" fill="#0F766E"/>
+
+    <rect x="775" y="300" width="85" height="170" rx="6" fill="#FFFFFF" stroke="#1E3A8A" stroke-width="2"/>
+    <rect x="793" y="320" width="12" height="16" rx="2" fill="#2563EB"/>
+    <rect x="817" y="320" width="12" height="16" rx="2" fill="#2563EB"/>
+    <rect x="793" y="350" width="12" height="16" rx="2" fill="#2563EB"/>
+    <rect x="817" y="350" width="12" height="16" rx="2" fill="#2563EB"/>
+    <rect x="793" y="380" width="12" height="16" rx="2" fill="#2563EB"/>
+    <rect x="817" y="380" width="12" height="16" rx="2" fill="#2563EB"/>
+
+    <rect x="870" y="380" width="55" height="90" rx="6" fill="#FFFFFF" stroke="#1E3A8A" stroke-width="2"/>
+    <rect x="883" y="396" width="9" height="12" rx="2" fill="#15803D"/>
+    <rect x="901" y="396" width="9" height="12" rx="2" fill="#15803D"/>
+  </g>
+
+  <!-- Road -->
+  <rect x="40" y="470" width="920" height="18" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="2" rx="4"/>
+  <line x1="60" y1="479" x2="940" y2="479" stroke="#E2E8F0" stroke-width="2" stroke-dasharray="10 10"/>
+
+  <!-- Cloud AI hub top center -->
+  <g transform="translate(500,90)">
+    <path d="M-70 20 a30 30 0 0 1 10 -58 a40 40 0 0 1 76 -8 a34 34 0 0 1 4 66 z" fill="#FFFFFF" stroke="#2563EB" stroke-width="2"/>
+    <circle cx="0" cy="-12" r="5" fill="#2563EB"/>
+    <circle cx="-20" cy="0" r="4" fill="#0F766E"/>
+    <circle cx="20" cy="2" r="4" fill="#0F766E"/>
+    <circle cx="0" cy="10" r="4" fill="#1E3A8A"/>
+    <line x1="0" y1="-12" x2="-20" y2="0" stroke="#2563EB" stroke-width="1.5"/>
+    <line x1="0" y1="-12" x2="20" y2="2" stroke="#2563EB" stroke-width="1.5"/>
+    <line x1="0" y1="-12" x2="0" y2="10" stroke="#2563EB" stroke-width="1.5"/>
+    <line x1="-20" y1="0" x2="0" y2="10" stroke="#2563EB" stroke-width="1.5"/>
+  </g>
+
+  <!-- connecting network lines from cloud to city elements -->
+  <path class="stroke dash" d="M470 130 C 380 180, 300 220, 230 300" />
+  <path class="strokeTeal dash" d="M530 130 C 620 180, 700 220, 760 300" />
+  <path class="stroke dash" d="M500 140 L 500 240" />
+
+  <!-- Analytics dashboard panel (left) -->
+  <g transform="translate(60,140)">
+    <rect x="0" y="0" width="150" height="100" rx="10" fill="#FFFFFF" stroke="#1E3A8A" stroke-width="2"/>
+    <rect x="14" y="16" width="40" height="6" rx="3" fill="#1E3A8A"/>
+    <rect x="14" y="34" width="14" height="50" fill="#2563EB" rx="2"/>
+    <rect x="34" y="50" width="14" height="34" fill="#0F766E" rx="2"/>
+    <rect x="54" y="40" width="14" height="44" fill="#15803D" rx="2"/>
+    <rect x="74" y="58" width="14" height="26" fill="#2563EB" rx="2"/>
+    <path d="M100 80 L 112 60 L 124 68 L 136 34" fill="none" stroke="#0F766E" stroke-width="2" stroke-linecap="round"/>
+  </g>
+
+  <!-- Location pins -->
+  <g>
+    <path d="M330 300 a14 14 0 1 1 0.01 0 z" fill="#2563EB"/>
+    <circle cx="330" cy="294" r="5" fill="#FFFFFF"/>
+    <path d="M630 300 a14 14 0 1 1 0.01 0 z" fill="#0F766E"/>
+    <circle cx="630" cy="294" r="5" fill="#FFFFFF"/>
+  </g>
+
+  <!-- Complaint workflow chip strip (right side) -->
+  <g transform="translate(770,150)">
+    <rect x="0" y="0" width="150" height="110" rx="10" fill="#FFFFFF" stroke="#1E3A8A" stroke-width="2"/>
+    <circle cx="20" cy="20" r="9" fill="#2563EB"/>
+    <rect x="36" y="15" width="90" height="10" rx="5" fill="#E2E8F0"/>
+    <circle cx="20" cy="45" r="9" fill="#0F766E"/>
+    <rect x="36" y="40" width="90" height="10" rx="5" fill="#E2E8F0"/>
+    <circle cx="20" cy="70" r="9" fill="#1E3A8A"/>
+    <rect x="36" y="65" width="90" height="10" rx="5" fill="#E2E8F0"/>
+    <circle cx="20" cy="95" r="9" fill="#15803D"/>
+    <rect x="36" y="90" width="90" height="10" rx="5" fill="#E2E8F0"/>
+  </g>
+
+  <!-- Citizens (abstract figures) walking near the road -->
+  <g>
+    <!-- figure 1 -->
+    <circle cx="400" cy="440" r="10" fill="#1E3A8A"/>
+    <path d="M388 462 q12 -18 24 0 l-4 8 h-16 z" fill="#2563EB"/>
+    <!-- figure 2 -->
+    <circle cx="440" cy="444" r="9" fill="#0F766E"/>
+    <path d="M429 464 q11 -16 22 0 l-4 7 h-14 z" fill="#2563EB"/>
+    <!-- figure 3 -->
+    <circle cx="560" cy="442" r="10" fill="#1E3A8A"/>
+    <path d="M548 462 q12 -18 24 0 l-4 8 h-16 z" fill="#0F766E"/>
+    <!-- figure 4 -->
+    <circle cx="600" cy="446" r="8" fill="#15803D"/>
+    <path d="M590 464 q10 -15 20 0 l-3 6 h-14 z" fill="#2563EB"/>
+  </g>
+
+  <!-- AI network small satellite nodes scattered -->
+  <g fill="#2563EB" opacity="0.7">
+    <circle cx="260" cy="160" r="3"/>
+    <circle cx="290" cy="140" r="3"/>
+    <circle cx="700" cy="150" r="3"/>
+    <circle cx="740" cy="170" r="3"/>
+  </g>
+</svg>

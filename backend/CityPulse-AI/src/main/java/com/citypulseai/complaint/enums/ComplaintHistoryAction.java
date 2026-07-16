@@ -1,0 +1,26 @@
+package com.citypulseai.complaint.enums;
+
+public enum ComplaintHistoryAction {
+
+    CREATED,
+
+    AI_ANALYSIS_COMPLETED,
+
+    AI_RECOMMENDATION_ACCEPTED,
+
+    AI_RECOMMENDATION_OVERRIDDEN,
+
+    OFFICER_ASSIGNED,
+
+    STATUS_CHANGED,
+
+    PRIORITY_CHANGED,
+
+    DEPARTMENT_CHANGED,
+
+    RESOLUTION_ADDED,
+
+    RESOLVED,
+
+    REJECTED
+}

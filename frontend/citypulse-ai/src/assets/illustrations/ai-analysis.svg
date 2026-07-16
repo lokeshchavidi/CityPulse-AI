@@ -1,0 +1,79 @@
+<svg viewBox="0 0 1000 562" xmlns="http://www.w3.org/2000/svg">
+  <!-- Central processing panel -->
+  <g transform="translate(360,140)">
+    <rect x="0" y="0" width="280" height="280" rx="16" fill="#FFFFFF" stroke="#1E3A8A" stroke-width="2"/>
+
+    <!-- Neural network nodes -->
+    <g stroke="#2563EB" stroke-width="1.5">
+      <line x1="50" y1="60" x2="140" y2="100"/>
+      <line x1="50" y1="140" x2="140" y2="100"/>
+      <line x1="50" y1="220" x2="140" y2="180"/>
+      <line x1="140" y1="100" x2="230" y2="70"/>
+      <line x1="140" y1="100" x2="230" y2="140"/>
+      <line x1="140" y1="180" x2="230" y2="140"/>
+      <line x1="140" y1="180" x2="230" y2="210"/>
+      <line x1="50" y1="60" x2="140" y2="180"/>
+      <line x1="50" y1="220" x2="140" y2="100"/>
+    </g>
+    <g fill="#1E3A8A">
+      <circle cx="50" cy="60" r="7"/>
+      <circle cx="50" cy="140" r="7"/>
+      <circle cx="50" cy="220" r="7"/>
+    </g>
+    <g fill="#2563EB">
+      <circle cx="140" cy="100" r="8"/>
+      <circle cx="140" cy="180" r="8"/>
+    </g>
+    <g fill="#0F766E">
+      <circle cx="230" cy="70" r="7"/>
+      <circle cx="230" cy="140" r="7"/>
+      <circle cx="230" cy="210" r="7"/>
+    </g>
+  </g>
+
+  <!-- Classification tag chip -->
+  <g transform="translate(120,90)">
+    <rect x="0" y="0" width="150" height="46" rx="23" fill="#FFFFFF" stroke="#2563EB" stroke-width="2"/>
+    <circle cx="26" cy="23" r="8" fill="#2563EB"/>
+    <rect x="46" y="16" width="86" height="8" rx="4" fill="#E2E8F0"/>
+    <rect x="46" y="28" width="60" height="6" rx="3" fill="#E2E8F0"/>
+  </g>
+  <path d="M270 113 C 320 130, 340 150, 362 178" fill="none" stroke="#2563EB" stroke-width="2" stroke-dasharray="4 6"/>
+
+  <!-- Priority detection chip -->
+  <g transform="translate(730,90)">
+    <rect x="-150" y="0" width="150" height="46" rx="23" fill="#FFFFFF" stroke="#0F766E" stroke-width="2"/>
+    <circle cx="-124" cy="23" r="8" fill="#0F766E"/>
+    <rect x="-104" y="16" width="86" height="8" rx="4" fill="#E2E8F0"/>
+    <rect x="-104" y="28" width="60" height="6" rx="3" fill="#E2E8F0"/>
+  </g>
+  <path d="M730 113 C 680 130, 660 150, 638 178" fill="none" stroke="#0F766E" stroke-width="2" stroke-dasharray="4 6"/>
+
+  <!-- Department recommendation chip -->
+  <g transform="translate(120,420)">
+    <rect x="0" y="0" width="170" height="46" rx="23" fill="#FFFFFF" stroke="#1E3A8A" stroke-width="2"/>
+    <circle cx="26" cy="23" r="8" fill="#1E3A8A"/>
+    <rect x="46" y="16" width="106" height="8" rx="4" fill="#E2E8F0"/>
+    <rect x="46" y="28" width="76" height="6" rx="3" fill="#E2E8F0"/>
+  </g>
+  <path d="M280 440 C 320 420, 340 400, 372 372" fill="none" stroke="#1E3A8A" stroke-width="2" stroke-dasharray="4 6"/>
+
+  <!-- Severity analysis chip -->
+  <g transform="translate(710,420)">
+    <rect x="-170" y="0" width="170" height="46" rx="23" fill="#FFFFFF" stroke="#15803D" stroke-width="2"/>
+    <circle cx="-144" cy="23" r="8" fill="#15803D"/>
+    <rect x="-124" y="16" width="106" height="8" rx="4" fill="#E2E8F0"/>
+    <rect x="-124" y="28" width="76" height="6" rx="3" fill="#E2E8F0"/>
+  </g>
+  <path d="M710 440 C 670 420, 650 400, 628 372" fill="none" stroke="#15803D" stroke-width="2" stroke-dasharray="4 6"/>
+
+  <!-- Small analytics dashboard bottom center -->
+  <g transform="translate(430,470)">
+    <rect x="0" y="0" width="140" height="60" rx="10" fill="#FFFFFF" stroke="#1E3A8A" stroke-width="2"/>
+    <rect x="14" y="14" width="10" height="32" fill="#2563EB" rx="2"/>
+    <rect x="30" y="24" width="10" height="22" fill="#0F766E" rx="2"/>
+    <rect x="46" y="18" width="10" height="28" fill="#15803D" rx="2"/>
+    <rect x="62" y="28" width="10" height="18" fill="#2563EB" rx="2"/>
+    <path d="M90 40 L100 24 L112 32 L124 12" fill="none" stroke="#1E3A8A" stroke-width="2" stroke-linecap="round"/>
+  </g>
+</svg>
