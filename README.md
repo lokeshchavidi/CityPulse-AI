@@ -1,4 +1,4 @@
-  #🏙️ CityPulse AI
+# 🏙️ CityPulse AI
  
 CityPulse AI is an AI-powered Smart City Complaint Management Platform that enables citizens to report civic issues while leveraging Google Gemini AI to analyze, classify, prioritize, and route complaints through a Human-in-the-Loop (HITL) workflow. The platform helps government departments efficiently manage, assign, and resolve complaints with role-based access control and real-time notifications.
  
