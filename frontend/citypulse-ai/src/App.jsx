@@ -2,8 +2,11 @@ import { Toaster } from "react-hot-toast";
 
 import AppRoutes from "@/routes/AppRoutes";
 import ScrollToTop from "@/components/common/Scroll/ScrollToTop";
+import useTheme from "@/hooks/useTheme";
 
 const App = () => {
+  const { isDark } = useTheme();
+
   return (
     <>
       <ScrollToTop />
@@ -16,8 +19,9 @@ const App = () => {
           duration: 4000,
           style: {
             borderRadius: "12px",
-            background: "#0f172a",
+            background: isDark ? "#1e293b" : "#0f172a",
             color: "#f8fafc",
+            border: isDark ? "1px solid #334155" : "none",
             fontSize: "14px",
             fontWeight: 500,
           },

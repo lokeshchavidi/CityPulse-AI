@@ -1,37 +1,40 @@
 import { Link } from "react-router-dom";
-import { ServerCrash, Home, RefreshCw } from "lucide-react";
+import { Home, RefreshCw, ServerCrash } from "lucide-react";
 
 import Button from "@/components/common/Button/Button";
 
 const ServerError = () => {
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-slate-50 px-6 text-center">
-      <div className="flex h-20 w-20 items-center justify-center rounded-full bg-red-100">
-        <ServerCrash size={36} className="text-red-700" />
+    <div className="flex min-h-screen flex-col items-center justify-center bg-canvas px-6 text-center">
+      <div className="flex h-16 w-16 items-center justify-center rounded-xl bg-red-50 text-red-700">
+        <ServerCrash size={28} aria-hidden="true" />
       </div>
 
-      <h1 className="mt-8 text-6xl font-extrabold text-slate-900">500</h1>
+      <p className="mt-6 text-sm font-semibold uppercase tracking-wide text-red-700">
+        Error 500
+      </p>
 
-      <h2 className="mt-3 text-2xl font-semibold text-slate-800">
-        Something Went Wrong
-      </h2>
+      <h1 className="mt-2 text-3xl font-bold tracking-tight text-slate-900 md:text-4xl">
+        Something went wrong
+      </h1>
 
-      <p className="mt-3 max-w-md text-slate-600">
-        An unexpected error occurred on our end. Please try again in a
-        moment.
+      <p className="mt-3 max-w-md text-sm leading-relaxed text-slate-500 md:text-base">
+        An unexpected error occurred on our end. Please try again in a moment.
       </p>
 
       <div className="mt-8 flex flex-wrap justify-center gap-3">
         <Button
           variant="outline"
-          leftIcon={<RefreshCw size={18} />}
+          leftIcon={<RefreshCw size={18} aria-hidden="true" />}
           onClick={() => window.location.reload()}
         >
-          Try Again
+          Try again
         </Button>
 
         <Link to="/">
-          <Button leftIcon={<Home size={18} />}>Back to Home</Button>
+          <Button leftIcon={<Home size={18} aria-hidden="true" />}>
+            Back to home
+          </Button>
         </Link>
       </div>
     </div>

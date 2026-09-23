@@ -1,15 +1,5 @@
 @import "./variables.css";
 
-/*
- * Wrapped in Tailwind's "base" cascade layer.
- * IMPORTANT: Tailwind v4 (@import "tailwindcss") declares utility classes
- * inside `@layer utilities`. CSS cascade layers always lose to *unlayered*
- * rules, no matter how low their specificity is. Previously this reset lived
- * outside any @layer, so its `margin: 0` / `padding: 0` silently beat every
- * spacing utility in the app (px-*, py-*, m-*, mx-auto, gap-*, etc. all
- * computed to 0). Wrapping it in @layer base fixes that ordering so
- * utilities can override it as expected.
- */
 @layer base {
   *,
   *::before,
@@ -24,15 +14,44 @@
     overflow-x: hidden;
   }
 
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
   body {
     min-height: 100vh;
     overflow-x: hidden;
-    font-family: "Inter", sans-serif;
-    background-color: var(--color-background, #f8fafc);
-    color: var(--color-text-primary, #0f172a);
-    line-height: 1.5;
+    font-family: var(--font-sans);
+    background-color: var(--background);
+    color: var(--text-primary);
+    line-height: var(--leading-normal);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    transition:
+      background-color var(--transition),
+      color var(--transition);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+    color: var(--text-primary);
   }
 
   a {
@@ -62,5 +81,10 @@
   ul,
   ol {
     list-style: none;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--brand-600);
+    outline-offset: 2px;
   }
 }

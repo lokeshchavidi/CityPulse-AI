@@ -8,6 +8,7 @@ import {
   Building2,
   ClipboardCheck,
   CheckCircle2,
+  BarChart3,
 } from "lucide-react";
 
 /* -------------------- Citizen -------------------- */
@@ -20,6 +21,7 @@ export const citizenMenu = [
     icon: PlusCircle,
   },
   { label: "My Complaints", path: "/citizen/complaints", icon: ClipboardList },
+  { label: "Statistics", path: "/citizen/statistics", icon: BarChart3 },
   { label: "Notifications", path: "/notifications", icon: Bell },
   { label: "Profile", path: "/profile", icon: User },
 ];
@@ -33,6 +35,7 @@ export const officerMenu = [
     path: "/officer/complaints",
     icon: ClipboardList,
   },
+  { label: "Statistics", path: "/officer/statistics", icon: BarChart3 },
   { label: "Notifications", path: "/notifications", icon: Bell },
   { label: "Profile", path: "/profile", icon: User },
 ];
@@ -61,6 +64,11 @@ export const departmentManagerMenu = [
     icon: CheckCircle2,
   },
   {
+    label: "Statistics",
+    path: "/department-manager/statistics",
+    icon: BarChart3,
+  },
+  {
     label: "Officers",
     path: "/department-manager/officers",
     icon: Users,
@@ -81,6 +89,8 @@ export const departmentManagerMenu = [
 
 export const adminMenu = [
   { label: "Dashboard", path: "/admin/dashboard", icon: LayoutDashboard },
+  { label: "All Complaints", path: "/admin/complaints", icon: ClipboardList },
+  { label: "Statistics", path: "/admin/statistics", icon: BarChart3 },
   { label: "Users", path: "/admin/users", icon: Users },
   { label: "Departments", path: "/admin/departments", icon: Building2 },
   { label: "Notifications", path: "/notifications", icon: Bell },

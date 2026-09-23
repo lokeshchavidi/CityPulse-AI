@@ -4,6 +4,8 @@ import { Menu } from "lucide-react";
 import { motion } from "framer-motion";
 
 import Button from "@/components/common/Button/Button";
+import LightPlate from "@/components/common/LightPlate";
+import ThemeToggle from "@/components/common/ThemeToggle";
 import NavLinks from "./NavLinks";
 import MobileMenu from "./MobileMenu";
 
@@ -18,14 +20,13 @@ const Navbar = () => {
   const [activeSection, setActiveSection] = useState("home");
 
   useEffect(() => {
-    // Only track sections on the landing page
     if (location.pathname !== "/") {
       setScrolled(true);
       return;
     }
 
     const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
+      setScrolled(window.scrollY > 12);
 
       const sections = [
         "home",
@@ -50,16 +51,13 @@ const Navbar = () => {
     };
 
     handleScroll();
-
     window.addEventListener("scroll", handleScroll);
-
     return () => window.removeEventListener("scroll", handleScroll);
   }, [location.pathname]);
 
   const navigateToSection = (id) => {
     setMobileOpen(false);
 
-    // Already on landing page → smooth scroll
     if (location.pathname === "/") {
       document.getElementById(id)?.scrollIntoView({
         behavior: "smooth",
@@ -68,7 +66,6 @@ const Navbar = () => {
       return;
     }
 
-    // Coming from login/register/officer login
     navigate("/", {
       state: {
         scrollTo: id,
@@ -79,18 +76,24 @@ const Navbar = () => {
   return (
     <>
       <motion.header
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 0.4 }}
+        initial={{ y: -24, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.35 }}
         className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
           scrolled
-            ? "border-b border-slate-200 bg-white/90 shadow-sm backdrop-blur-xl"
-            : "bg-transparent"
+            ? "border-b border-slate-200/90 bg-surface/95 shadow-soft-sm backdrop-blur-md"
+            : "border-b border-transparent bg-surface/70 backdrop-blur-sm"
         }`}
       >
         <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-5 sm:px-8 lg:px-10">
-          <Link to="/" className="flex items-center">
-            <img src={Logo} alt="CityPulse AI" className="h-14 w-auto" />
+          <Link to="/" className="flex items-center" aria-label="CityPulse AI home">
+            <LightPlate padding="sm" rounded="rounded-lg">
+              <img
+                src={Logo}
+                alt="CityPulse AI"
+                className="h-12 w-auto object-contain sm:h-14"
+              />
+            </LightPlate>
           </Link>
 
           <NavLinks
@@ -98,22 +101,29 @@ const Navbar = () => {
             onNavigate={navigateToSection}
           />
 
-          <div className="hidden items-center gap-4 xl:flex">
+          <div className="hidden items-center gap-3 xl:flex">
+            <ThemeToggle />
+
             <Link to="/officer/login">
-              <Button variant="outline">Officer Portal</Button>
+              <Button variant="outline" size="sm">
+                Staff Portal
+              </Button>
             </Link>
 
             <Link to="/login">
-              <Button>Citizen Login</Button>
+              <Button size="sm">Citizen Login</Button>
             </Link>
           </div>
 
           <button
+            type="button"
             onClick={() => setMobileOpen(true)}
-            className="rounded-xl p-2 transition hover:bg-slate-100 xl:hidden"
-            aria-label="Open Menu"
+            className="rounded-lg p-2 text-slate-700 transition hover:bg-slate-100 xl:hidden"
+            aria-label="Open navigation menu"
+            aria-expanded={mobileOpen}
+            aria-controls="mobile-navigation"
           >
-            <Menu size={28} />
+            <Menu size={24} aria-hidden="true" />
           </button>
         </div>
       </motion.header>

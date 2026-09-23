@@ -37,10 +37,28 @@ const markAllAsRead = async () => {
   return response.data.data;
 };
 
+const deleteNotification = async (notificationId) => {
+  const response = await axiosClient.delete(
+    API_ENDPOINTS.NOTIFICATION.DELETE(notificationId),
+  );
+
+  return response.data.data;
+};
+
+const deleteAllNotifications = async () => {
+  const response = await axiosClient.delete(
+    API_ENDPOINTS.NOTIFICATION.DELETE_ALL,
+  );
+
+  return response.data.data;
+};
+
 export const notificationApi = {
   getNotifications,
   getUnreadNotifications,
   getUnreadCount,
   markAsRead,
   markAllAsRead,
+  deleteNotification,
+  deleteAllNotifications,
 };

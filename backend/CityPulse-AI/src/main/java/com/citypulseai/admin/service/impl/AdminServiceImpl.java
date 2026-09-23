@@ -2,7 +2,6 @@ package com.citypulseai.admin.service.impl;
 
 import java.util.List;
 
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,7 +12,6 @@ import com.citypulseai.admin.dto.UserResponse;
 import com.citypulseai.admin.exception.InvalidUserOperationException;
 import com.citypulseai.admin.mapper.AdminMapper;
 import com.citypulseai.admin.service.AdminService;
-import com.citypulseai.common.constants.AppConstants;
 import com.citypulseai.common.service.CurrentUserService;
 import com.citypulseai.complaint.entity.ComplaintStatus;
 import com.citypulseai.complaint.enums.ComplaintPriority;
@@ -21,20 +19,23 @@ import com.citypulseai.complaint.repository.ComplaintRepository;
 import com.citypulseai.department.entity.Department;
 import com.citypulseai.department.exception.DepartmentNotFoundException;
 import com.citypulseai.department.repository.DepartmentRepository;
-import com.citypulseai.notification.dto.NotificationMessages;
-import com.citypulseai.notification.entity.NotificationType;
 import com.citypulseai.notification.service.NotificationService;
 import com.citypulseai.role.entity.Role;
 import com.citypulseai.role.enums.RoleType;
 import com.citypulseai.role.exception.RoleNotFoundException;
 import com.citypulseai.role.repository.RoleRepository;
+import com.citypulseai.statistics.dto.ComplaintStatisticsResponse;
+import com.citypulseai.statistics.service.ComplaintStatisticsService;
 import com.citypulseai.user.entity.User;
 import com.citypulseai.user.exception.DepartmentManagerAlreadyExistsException;
 import com.citypulseai.user.exception.EmailAlreadyExistsException;
 import com.citypulseai.user.exception.UserNotFoundException;
 import com.citypulseai.user.repository.UserRepository;
 import com.citypulseai.user.util.UserIdGenerator;
-
+import com.citypulseai.common.constants.AppConstants;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import com.citypulseai.notification.entity.NotificationType;
+import com.citypulseai.notification.dto.NotificationMessages;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -50,6 +51,7 @@ public class AdminServiceImpl implements AdminService{
 	private final RoleRepository roleRepository;
 	private final PasswordEncoder passwordEncoder;
 	private final UserIdGenerator userIdGenerator;
+	private final ComplaintStatisticsService complaintStatisticsService;
 	
 	@Override
 	@Transactional(readOnly = true)
@@ -68,6 +70,12 @@ public class AdminServiceImpl implements AdminService{
 	            .totalDepartmentManagers(userRepository.countByRole_RoleType(RoleType.DEPARTMENT_MANAGER))
 	            .totalDepartments(departmentRepository.count())
 	            .build();
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public ComplaintStatisticsResponse getStatistics() {
+	    return complaintStatisticsService.getPlatformStatistics();
 	}
 	
 	@Override
@@ -94,26 +102,26 @@ public class AdminServiceImpl implements AdminService{
 	@Override
 	@Transactional
 	public UserResponse createStaffUser(CreateStaffUserRequest request) {
- 
+
 	    if (request.getRole() == RoleType.CITIZEN) {
 	        throw new InvalidUserOperationException(
 	                "Citizens cannot be created through staff creation. They must self-register.");
 	    }
- 
+
 	    if (userRepository.existsByEmail(request.getEmail())) {
 	        throw new EmailAlreadyExistsException(AppConstants.EMAIL_ALREADY_EXISTS);
 	    }
- 
+
 	    Department department = null;
- 
+
 	    if (request.getRole() == RoleType.OFFICER
 	            || request.getRole() == RoleType.DEPARTMENT_MANAGER) {
- 
+
 	        if (request.getDepartmentId() == null) {
 	            throw new InvalidUserOperationException(
 	                    "Department is required for this role.");
 	        }
- 
+
 	        department = departmentRepository.findById(request.getDepartmentId())
 	                .orElseThrow(() -> new DepartmentNotFoundException(
 	                        AppConstants.DEPARTMENT_NOT_FOUND));
@@ -122,15 +130,15 @@ public class AdminServiceImpl implements AdminService{
 	                && userRepository.existsByRole_RoleTypeAndDepartment(
 	                        RoleType.DEPARTMENT_MANAGER,
 	                        department)) {
- 
+
 	            throw new DepartmentManagerAlreadyExistsException(
 	                    "This department already has a Department Manager.");
 	        }
 	    }
- 
+
 	    Role role = roleRepository.findByRoleType(request.getRole())
 	            .orElseThrow(() -> new RoleNotFoundException(AppConstants.ROLE_NOT_FOUND));
- 
+
 	    User staffUser = User.builder()
 	            .userId(userIdGenerator.generateUserId())
 	            .firstName(request.getFirstName())
@@ -142,9 +150,9 @@ public class AdminServiceImpl implements AdminService{
 	            .role(role)
 	            .department(department)
 	            .build();
- 
+
 	    User savedUser = userRepository.save(staffUser);
- 
+
 	    notificationService.createNotification(
 	            savedUser,
 	            null,
@@ -152,7 +160,7 @@ public class AdminServiceImpl implements AdminService{
 	            "Welcome to CityPulse AI",
 	            "Your " + role.getRoleType().name().replace("_", " ")
 	                    + " account has been created by the administrator.");
- 
+
 	    return adminMapper.toUserResponse(savedUser);
 	}
 	
@@ -173,41 +181,41 @@ public class AdminServiceImpl implements AdminService{
 	public UserResponse updateUserDepartment(
 	        String userId,
 	        UpdateUserDepartmentRequest request) {
- 
+
 	    User user = userRepository.findByUserId(userId)
 	            .orElseThrow(() -> new UserNotFoundException(
 	                    "User not found with ID: " + userId));
- 
+
 	    validateDepartmentTransfer(user);
- 
+
 	    Department department = departmentRepository
 	            .findById(request.getDepartmentId())
 	            .orElseThrow(() -> new DepartmentNotFoundException(
 	                    "Department not found with ID: " + request.getDepartmentId()));
- 
+
 	    if (user.getDepartment() != null
 	            && user.getDepartment().getDepartmentId()
 	                    .equals(department.getDepartmentId())) {
- 
+
 	        throw new InvalidUserOperationException(
 	                "User is already assigned to this department.");
 	    }
- 
+
 	    Department previousDepartment = user.getDepartment();
 	    
 	    if (user.getRole().getRoleType() == RoleType.DEPARTMENT_MANAGER
 	            && userRepository.existsByRole_RoleTypeAndDepartment(
 	                    RoleType.DEPARTMENT_MANAGER,
 	                    department)) {
- 
+
 	        throw new DepartmentManagerAlreadyExistsException(
 	        		"This department already has a Department Manager.");
 	    }
- 
+
 	    user.setDepartment(department);
- 
+
 	    User updatedUser = userRepository.save(user);
- 
+
 	    notificationService.createNotification(
 	            updatedUser,
 	            null,
@@ -220,7 +228,7 @@ public class AdminServiceImpl implements AdminService{
 	                    + " to "
 	                    + department.getDepartmentName()
 	                    + ".");
- 
+
 	    return adminMapper.toUserResponse(updatedUser);
 	}
 	

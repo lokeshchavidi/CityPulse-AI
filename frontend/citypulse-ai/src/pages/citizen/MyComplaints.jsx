@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { PlusCircle } from "lucide-react";
 
 import DashboardHeader from "@/components/dashboard/DashboardHeader";
 import SectionCard from "@/components/dashboard/SectionCard";
 import LoadingSkeleton from "@/components/dashboard/LoadingSkeleton";
 import EmptyState from "@/components/dashboard/EmptyState";
+import Button from "@/components/common/Button/Button";
 
 import {
   ComplaintTable,
@@ -42,23 +44,44 @@ const MyComplaints = () => {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 md:space-y-8">
       <DashboardHeader
-        title="My Complaints"
+        title="My complaints"
         subtitle="Track the progress of all your submitted complaints."
+        action={
+          <Link to="/citizen/complaints/new">
+            <Button
+              leftIcon={<PlusCircle size={18} aria-hidden="true" />}
+              className="w-full sm:w-auto"
+            >
+              New complaint
+            </Button>
+          </Link>
+        }
       />
 
-      <SectionCard>
+      <SectionCard
+        title="All submissions"
+        subtitle={
+          loading
+            ? "Loading your complaints…"
+            : `${complaints.length} complaint${complaints.length === 1 ? "" : "s"} filed`
+        }
+      >
         {loading ? (
-          <LoadingSkeleton />
+          <LoadingSkeleton rows={5} />
         ) : complaints.length === 0 ? (
           <EmptyState
             title="No complaints found"
             description="You haven't submitted any complaints yet."
+            action={
+              <Link to="/citizen/complaints/new">
+                <Button size="sm">Create complaint</Button>
+              </Link>
+            }
           />
         ) : (
           <>
-            {/* Desktop */}
             <div className="hidden lg:block">
               <ComplaintTable
                 complaints={complaints}
@@ -66,8 +89,7 @@ const MyComplaints = () => {
               />
             </div>
 
-            {/* Mobile & Tablet */}
-            <div className="grid gap-5 lg:hidden">
+            <div className="grid gap-4 lg:hidden">
               {complaints.map((complaint) => (
                 <ComplaintCard
                   key={complaint.complaintId}

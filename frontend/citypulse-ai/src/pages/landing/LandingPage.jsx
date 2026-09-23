@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 
 import PublicLayout from "@/layouts/PublicLayout";
 
-import Hero from "@/components/landing/Hero";
+import Hero, { HeroStats } from "@/components/landing/Hero";
 import About from "@/components/landing/About";
 import Features from "@/components/landing/Features";
 import Departments from "@/components/landing/Departments";
@@ -28,6 +28,7 @@ const LandingPage = () => {
   return (
     <PublicLayout>
       <Hero />
+      <HeroStats />
       <About />
       <Features />
       <Departments />

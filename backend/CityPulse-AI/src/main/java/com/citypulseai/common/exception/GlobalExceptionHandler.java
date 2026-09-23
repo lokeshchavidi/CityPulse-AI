@@ -22,15 +22,19 @@ import com.citypulseai.common.response.ErrorResponse;
 import com.citypulseai.common.response.ValidationError;
 import com.citypulseai.common.response.ValidationErrorResponse;
 import com.citypulseai.complaint.exception.ComplaintNotFoundException;
+import com.citypulseai.complaint.exception.DepartmentNotAssignedException;
+import com.citypulseai.complaint.exception.InvalidOfficerException;
 import com.citypulseai.complaint.exception.UnauthorizedComplaintAccessException;
-import com.citypulseai.department.exception.DepartmentAlreadyExistsException;
 import com.citypulseai.department.exception.DepartmentNotFoundException;
+import com.citypulseai.department.exception.DepartmentAlreadyExistsException;
 import com.citypulseai.departmentmanager.exception.InvalidComplaintStateException;
 import com.citypulseai.notification.exception.NotificationNotFoundException;
 import com.citypulseai.user.exception.DepartmentManagerAlreadyExistsException;
 import com.citypulseai.user.exception.EmailAlreadyExistsException;
 import com.citypulseai.user.exception.InvalidPasswordException;
+import com.citypulseai.user.exception.UserNotFoundException;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;
 
 @RestControllerAdvice
@@ -124,20 +128,6 @@ public class GlobalExceptionHandler {
 				.status(HttpStatus.BAD_REQUEST)
 				.body(validationErrorResponse);
 	}
-	@ExceptionHandler(DepartmentManagerAlreadyExistsException.class)
-	public ResponseEntity<ErrorResponse> handleDepartmentManagerAlreadyExistsException(
-	        DepartmentManagerAlreadyExistsException ex) {
- 
-	    ErrorResponse errorResponse = ErrorResponse.builder()
-	            .success(false)
-	            .message(ex.getMessage())
-	            .timestamp(LocalDateTime.now())
-	            .build();
- 
-	    return ResponseEntity
-	            .status(HttpStatus.CONFLICT)
-	            .body(errorResponse);
-	}
 	
 	@ExceptionHandler(EmailAlreadyExistsException.class)
 	public ResponseEntity<ErrorResponse> handleEmailAlreadyException(EmailAlreadyExistsException ex) {
@@ -165,6 +155,21 @@ public class GlobalExceptionHandler {
 
 	    return ResponseEntity
 	            .status(HttpStatus.BAD_REQUEST)
+	            .body(errorResponse);
+	}
+	
+	@ExceptionHandler(DepartmentManagerAlreadyExistsException.class)
+	public ResponseEntity<ErrorResponse> handleDepartmentManagerAlreadyExistsException(
+	        DepartmentManagerAlreadyExistsException ex) {
+
+	    ErrorResponse errorResponse = ErrorResponse.builder()
+	            .success(false)
+	            .message(ex.getMessage())
+	            .timestamp(LocalDateTime.now())
+	            .build();
+
+	    return ResponseEntity
+	            .status(HttpStatus.CONFLICT)
 	            .body(errorResponse);
 	}
 	
@@ -197,6 +202,48 @@ public class GlobalExceptionHandler {
 	            .body(errorResponse);
 	}
 	
+	@ExceptionHandler(UserNotFoundException.class)
+	public ResponseEntity<ErrorResponse> handleUserNotFoundException(
+	        UserNotFoundException ex) {
+
+	    ErrorResponse errorResponse = ErrorResponse.builder()
+	            .success(false)
+	            .message(ex.getMessage())
+	            .timestamp(LocalDateTime.now())
+	            .build();
+
+	    return ResponseEntity.status(HttpStatus.NOT_FOUND)
+	            .body(errorResponse);
+	}
+
+	@ExceptionHandler(InvalidOfficerException.class)
+	public ResponseEntity<ErrorResponse> handleInvalidOfficerException(
+	        InvalidOfficerException ex) {
+
+	    ErrorResponse errorResponse = ErrorResponse.builder()
+	            .success(false)
+	            .message(ex.getMessage())
+	            .timestamp(LocalDateTime.now())
+	            .build();
+
+	    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+	            .body(errorResponse);
+	}
+
+	@ExceptionHandler(DepartmentNotAssignedException.class)
+	public ResponseEntity<ErrorResponse> handleDepartmentNotAssignedException(
+	        DepartmentNotAssignedException ex) {
+
+	    ErrorResponse errorResponse = ErrorResponse.builder()
+	            .success(false)
+	            .message(ex.getMessage())
+	            .timestamp(LocalDateTime.now())
+	            .build();
+
+	    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+	            .body(errorResponse);
+	}
+
 	@ExceptionHandler(ComplaintNotFoundException.class)
 	public ResponseEntity<ErrorResponse> handleComplaintNotFoundException(
 	        ComplaintNotFoundException ex) {
@@ -368,6 +415,4 @@ public class GlobalExceptionHandler {
 				.status(HttpStatus.INTERNAL_SERVER_ERROR)
 				.body(errorResponse);
 	}
-	
-	
 }

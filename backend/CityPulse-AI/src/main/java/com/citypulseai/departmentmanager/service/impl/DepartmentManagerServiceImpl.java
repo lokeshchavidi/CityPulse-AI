@@ -34,6 +34,8 @@ import com.citypulseai.notification.dto.NotificationMessages;
 import com.citypulseai.notification.entity.NotificationType;
 import com.citypulseai.notification.service.NotificationService;
 import com.citypulseai.role.enums.RoleType;
+import com.citypulseai.statistics.dto.ComplaintStatisticsResponse;
+import com.citypulseai.statistics.service.ComplaintStatisticsService;
 import com.citypulseai.user.entity.User;
 import com.citypulseai.user.exception.UserNotFoundException;
 import com.citypulseai.user.repository.UserRepository;
@@ -62,6 +64,8 @@ public class DepartmentManagerServiceImpl implements DepartmentManagerService{
 	private final NotificationService notificationService;
 	
 	private final DepartmentRepository departmentRepository;
+
+	private final ComplaintStatisticsService complaintStatisticsService;
 	
 	@Override
 	@Transactional(readOnly = true)
@@ -294,9 +298,7 @@ public class DepartmentManagerServiceImpl implements DepartmentManagerService{
 
 	    return DepartmentDashboardResponse.builder()
 	            .pendingReviewComplaints(
-	                    complaintRepository.countByDepartmentAndStatus(
-	                            department,
-	                            ComplaintStatus.UNDER_REVIEW))
+	                    aiAnalysisRepository.countComplaintQueue(department))
 	            .assignedComplaints(
 	                    complaintRepository.countByDepartmentAndStatus(
 	                            department,
@@ -312,8 +314,25 @@ public class DepartmentManagerServiceImpl implements DepartmentManagerService{
 	            .criticalComplaints(
 	                    complaintRepository.countByDepartmentAndPriority(
 	                            department,
+	                            ComplaintPriority.CRITICAL)
+	                    + aiAnalysisRepository.countUnassignedOpenByAiPriority(
+	                            department,
 	                            ComplaintPriority.CRITICAL))
 	            .build();
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public ComplaintStatisticsResponse getStatistics() {
+	    User manager = currentUserService.getCurrentUser();
+	    Department department = manager.getDepartment();
+
+	    if (department == null) {
+	        throw new DepartmentNotFoundException(
+	                "Department Manager is not assigned to any department.");
+	    }
+
+	    return complaintStatisticsService.getDepartmentStatistics(department);
 	}
 	
 	@Override
@@ -428,19 +447,31 @@ public class DepartmentManagerServiceImpl implements DepartmentManagerService{
 	    complaint.setAssignedOfficer(officer);
 	    complaint.setStatus(ComplaintStatus.ASSIGNED);
 	}
+
+	private User requireDepartmentManager() {
+	    User manager = currentUserService.getCurrentUser();
+
+	    if (manager.getRole() == null
+	            || manager.getRole().getRoleType() != RoleType.DEPARTMENT_MANAGER) {
+	        throw new AccessDeniedException(
+	                "Only department managers can access this resource.");
+	    }
+
+	    if (manager.getDepartment() == null) {
+	        throw new DepartmentNotFoundException(
+	                "Department Manager is not assigned to any department.");
+	    }
+
+	    return manager;
+	}
 	
 	@Override
 	@Transactional(readOnly = true)
 	public List<DepartmentComplaintResponse> getActiveComplaints() {
 
-	    User manager = currentUserService.getCurrentUser();
+	    User manager = requireDepartmentManager();
 
 	    Department department = manager.getDepartment();
-
-	    if (department == null) {
-	        throw new DepartmentNotFoundException(
-	                "Department Manager is not assigned to any department.");
-	    }
 
 	    List<Complaint> complaints =
 	            complaintRepository.findByDepartmentAndStatusIn(
@@ -458,14 +489,9 @@ public class DepartmentManagerServiceImpl implements DepartmentManagerService{
 	@Transactional(readOnly = true)
 	public List<DepartmentComplaintResponse> getResolvedComplaints() {
 
-	    User manager = currentUserService.getCurrentUser();
+	    User manager = requireDepartmentManager();
 
 	    Department department = manager.getDepartment();
-
-	    if (department == null) {
-	        throw new DepartmentNotFoundException(
-	                "Department Manager is not assigned to any department.");
-	    }
 
 	    List<Complaint> complaints =
 	            complaintRepository.findByDepartmentAndStatus(

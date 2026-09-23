@@ -36,7 +36,7 @@ const ConfirmDialog = ({
       {open && (
         <>
           <motion.div
-            className="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm"
+            className="fixed inset-0 z-40 bg-slate-950/50 backdrop-blur-sm"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -48,7 +48,7 @@ const ConfirmDialog = ({
               role="alertdialog"
               aria-modal="true"
               aria-labelledby="confirm-dialog-title"
-              className="w-full max-w-sm rounded-2xl border border-slate-200 bg-white p-6 shadow-xl"
+              className="w-full max-w-sm rounded-xl border border-slate-200 bg-surface p-6 shadow-soft-md"
               initial={{ opacity: 0, y: 12, scale: 0.98 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 12, scale: 0.98 }}
@@ -56,10 +56,10 @@ const ConfirmDialog = ({
             >
               <div className="flex items-start gap-3">
                 <div
-                  className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl ${
+                  className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-lg ${
                     variant === "danger"
                       ? "bg-red-100 text-red-600"
-                      : "bg-blue-100 text-blue-700"
+                      : "bg-brand-50 text-brand-800"
                   }`}
                 >
                   <AlertTriangle size={20} />

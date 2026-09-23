@@ -1,5 +1,4 @@
 import { Bell, ClipboardList, PlusCircle, User } from "lucide-react";
-
 import { Link } from "react-router-dom";
 
 const actions = [
@@ -11,7 +10,7 @@ const actions = [
   },
   {
     title: "My Complaints",
-    description: "Track your submissions",
+    description: "Track all submissions",
     icon: ClipboardList,
     path: "/citizen/complaints",
   },
@@ -31,7 +30,7 @@ const actions = [
 
 const QuickActions = () => {
   return (
-    <div className="grid gap-4 sm:grid-cols-2">
+    <div className="grid gap-3">
       {actions.map((action) => {
         const Icon = action.icon;
 
@@ -39,17 +38,18 @@ const QuickActions = () => {
           <Link
             key={action.title}
             to={action.path}
-            className="group flex flex-col rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-blue-200 hover:shadow-md"
+            className="group flex items-center gap-3 rounded-lg border border-slate-200 bg-canvas px-4 py-3 transition duration-200 hover:border-brand-200 hover:bg-surface hover:shadow-soft-sm"
           >
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-blue-100 bg-blue-50">
-              <Icon size={22} className="text-blue-700" />
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-brand-50 text-brand-800">
+              <Icon size={18} aria-hidden="true" />
             </div>
 
-            <h3 className="mt-4 font-semibold text-slate-900 transition-colors group-hover:text-blue-700">
-              {action.title}
-            </h3>
-
-            <p className="mt-1 text-sm text-slate-500">{action.description}</p>
+            <div className="min-w-0">
+              <h3 className="text-sm font-semibold text-slate-900 transition-colors group-hover:text-brand-800">
+                {action.title}
+              </h3>
+              <p className="text-xs text-slate-500">{action.description}</p>
+            </div>
           </Link>
         );
       })}

@@ -3,7 +3,6 @@ import { useParams } from "react-router-dom";
 import { Mail, Phone, Sparkles, UserCheck, PencilLine } from "lucide-react";
 import toast from "react-hot-toast";
 
-// Add this import with the other imports
 import ComplaintImageCard from "@/components/citizen/Complaint/Details/ComplaintImageCard";
 import DashboardHeader from "@/components/dashboard/DashboardHeader";
 import SectionCard from "@/components/dashboard/SectionCard";
@@ -16,6 +15,7 @@ import Textarea from "@/components/forms/Textarea";
 
 import ComplaintInformation from "@/components/citizen/Complaint/Details/ComplaintInformation";
 import ComplaintAIAnalysis from "@/components/citizen/Complaint/Details/ComplaintAIAnalysis";
+import ComplaintStatusTracker from "@/components/citizen/Complaint/Details/ComplaintStatusTracker";
 
 import departmentManagerService from "@/services/departmentManagerService";
 import departmentService from "@/services/departmentService";
@@ -139,7 +139,7 @@ const ReviewComplaint = () => {
     }
   };
 
-  if (loading) return <LoadingSkeleton />;
+  if (loading) return <LoadingSkeleton variant="detail" />;
 
   if (!complaint) {
     return (
@@ -155,45 +155,47 @@ const ReviewComplaint = () => {
     label: officer.officerName,
   }));
 
-  console.log("Complaint:", complaint);
-  console.log("Complaint Status:", complaint.status);
-  console.log("OPEN:", COMPLAINT_STATUS.OPEN);
-  console.log("UNDER_REVIEW:", COMPLAINT_STATUS.UNDER_REVIEW);
-
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 md:space-y-8">
       <DashboardHeader
         title={`Complaint ${complaint.complaintId}`}
         subtitle="Review AI analysis, assign an officer, or override the recommendation."
+        action={<StatusBadge status={complaint.status} />}
       />
 
-      <SectionCard title="Citizen & Priority">
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+      <ComplaintStatusTracker status={complaint.status} />
+
+      <SectionCard title="Citizen & priority">
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           <div>
-            <p className="text-sm font-medium text-slate-500">Citizen</p>
+            <p className="text-xs font-medium uppercase tracking-wide text-slate-400">
+              Citizen
+            </p>
             <p className="mt-1 font-semibold text-slate-900">
               {complaint.citizenName}
             </p>
           </div>
 
           <div>
-            <p className="flex items-center gap-2 text-sm font-medium text-slate-500">
-              <Mail size={15} /> Email
+            <p className="flex items-center gap-1.5 text-xs font-medium uppercase tracking-wide text-slate-400">
+              <Mail size={13} aria-hidden="true" /> Email
             </p>
-            <p className="mt-1 text-slate-700">{complaint.citizenEmail}</p>
+            <p className="mt-1 text-sm text-slate-700">{complaint.citizenEmail}</p>
           </div>
 
           <div>
-            <p className="flex items-center gap-2 text-sm font-medium text-slate-500">
-              <Phone size={15} /> Phone
+            <p className="flex items-center gap-1.5 text-xs font-medium uppercase tracking-wide text-slate-400">
+              <Phone size={13} aria-hidden="true" /> Phone
             </p>
-            <p className="mt-1 text-slate-700">
+            <p className="mt-1 text-sm text-slate-700">
               {complaint.citizenPhoneNumber}
             </p>
           </div>
 
           <div>
-            <p className="text-sm font-medium text-slate-500">Priority</p>
+            <p className="text-xs font-medium uppercase tracking-wide text-slate-400">
+              Priority
+            </p>
             <div className="mt-2">
               <StatusBadge status={complaint.priority} />
             </div>
@@ -201,38 +203,61 @@ const ReviewComplaint = () => {
         </div>
       </SectionCard>
 
-      {/* Image + AI Analysis */}
-      <div className="grid gap-8 lg:grid-cols-2">
-        <ComplaintImageCard complaint={complaint} />
+      {/* Left: image + details | Right: AI fills column height (no void under image) */}
+      <div className="grid items-stretch gap-6 xl:grid-cols-5">
+        <div className="flex flex-col gap-6 xl:col-span-3">
+          <ComplaintImageCard complaint={complaint} />
+          <ComplaintInformation complaint={complaint} />
+        </div>
 
-        <ComplaintAIAnalysis analysis={complaint.aiAnalysis} />
+        <div className="h-full xl:col-span-2">
+          <ComplaintAIAnalysis
+            analysis={complaint.aiAnalysis}
+            emptyTitle={
+              complaint.status === COMPLAINT_STATUS.OPEN
+                ? "AI analysis pending"
+                : "No AI classification"
+            }
+            emptyDescription={
+              complaint.status === COMPLAINT_STATUS.OPEN
+                ? "Analysis will appear once the system has classified this complaint."
+                : "This complaint was routed without an AI recommendation. Assign an officer to continue."
+            }
+          />
+        </div>
       </div>
-
-      {/* Complaint Information */}
-      <ComplaintInformation complaint={complaint} />
 
       {complaint.status === COMPLAINT_STATUS.OPEN && (
         <SectionCard
-          title="AI Recommendation Action"
+          title="AI recommendation action"
           subtitle="Accept the AI's suggested department and priority, or override it manually."
         >
-          <div className="flex flex-wrap gap-3">
+          <div className="flex flex-col gap-4 rounded-lg border border-brand-100 bg-brand-50/50 p-4 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <p className="text-sm font-semibold text-slate-900">
+                Accept AI recommendation
+              </p>
+              <p className="mt-1 text-xs text-slate-500">
+                Route this complaint using the suggested department and priority.
+              </p>
+            </div>
             <Button
-              leftIcon={<Sparkles size={18} />}
+              leftIcon={<Sparkles size={18} aria-hidden="true" />}
               loading={actionLoading}
               onClick={handleAcceptAI}
+              className="w-full sm:w-auto"
             >
-              Accept AI Recommendation
+              Accept recommendation
             </Button>
           </div>
 
           <form
             onSubmit={handleOverride}
-            className="mt-8 space-y-5 border-t border-slate-200 pt-6"
+            className="mt-6 space-y-5 border-t border-slate-200 pt-6"
           >
             <div className="flex items-center gap-2 text-slate-900">
-              <PencilLine size={18} />
-              <h3 className="font-semibold">Or Override Manually</h3>
+              <PencilLine size={18} aria-hidden="true" />
+              <h3 className="text-sm font-semibold">Or override manually</h3>
             </div>
 
             <div className="grid gap-5 sm:grid-cols-2">
@@ -282,16 +307,23 @@ const ReviewComplaint = () => {
               required
             />
 
-            <Button type="submit" variant="outline" loading={actionLoading}>
-              Submit Override
-            </Button>
+            <div className="flex justify-end">
+              <Button
+                type="submit"
+                variant="outline"
+                loading={actionLoading}
+                className="w-full sm:w-auto"
+              >
+                Submit override
+              </Button>
+            </div>
           </form>
         </SectionCard>
       )}
 
       {complaint.status === COMPLAINT_STATUS.UNDER_REVIEW && (
         <SectionCard
-          title="Assign Officer"
+          title="Assign officer"
           subtitle="Assign or reassign the officer responsible for this complaint."
         >
           <div className="flex flex-col gap-4 sm:flex-row sm:items-end">
@@ -307,11 +339,12 @@ const ReviewComplaint = () => {
             </div>
 
             <Button
-              leftIcon={<UserCheck size={18} />}
+              leftIcon={<UserCheck size={18} aria-hidden="true" />}
               loading={actionLoading}
               onClick={handleAssignOfficer}
+              className="w-full sm:w-auto"
             >
-              Assign Officer
+              Assign officer
             </Button>
           </div>
         </SectionCard>

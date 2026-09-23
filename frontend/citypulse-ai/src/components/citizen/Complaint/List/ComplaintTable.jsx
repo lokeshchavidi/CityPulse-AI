@@ -4,6 +4,7 @@ import Button from "@/components/common/Button/Button";
 import EmptyState from "@/components/dashboard/EmptyState";
 import LoadingSkeleton from "@/components/dashboard/LoadingSkeleton";
 import StatusBadge from "@/components/dashboard/StatusBadge";
+import dateUtils from "@/utils/dateUtils";
 
 const ComplaintTable = ({
   complaints = [],
@@ -24,86 +25,80 @@ const ComplaintTable = ({
   }
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-      <div className="overflow-x-auto">
-        <table className="min-w-[760px] w-full">
-          <thead className="bg-slate-50">
-            <tr>
-              <th className="px-6 py-4 text-left text-sm font-semibold text-slate-700">
-                Complaint
-              </th>
+    <div className="overflow-x-auto">
+      <table className="w-full min-w-[760px]">
+        <thead>
+          <tr className="border-b border-slate-200 text-left">
+            <th className="pb-3 text-xs font-semibold uppercase tracking-wide text-slate-500">
+              Complaint
+            </th>
+            <th className="pb-3 text-xs font-semibold uppercase tracking-wide text-slate-500">
+              Address
+            </th>
+            <th className="pb-3 text-xs font-semibold uppercase tracking-wide text-slate-500">
+              Status
+            </th>
+            <th className="pb-3 text-xs font-semibold uppercase tracking-wide text-slate-500">
+              Created
+            </th>
+            <th className="pb-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500">
+              Action
+            </th>
+          </tr>
+        </thead>
 
-              <th className="px-6 py-4 text-left text-sm font-semibold text-slate-700">
-                Address
-              </th>
+        <tbody>
+          {complaints.map((complaint) => (
+            <tr
+              key={complaint.complaintId}
+              onClick={() => onViewComplaint(complaint.complaintId)}
+              className="group cursor-pointer border-b border-slate-100 last:border-0 transition-colors hover:bg-slate-50"
+            >
+              <td className="py-4 pr-4">
+                <p className="font-semibold text-slate-900 transition-colors group-hover:text-brand-800">
+                  {complaint.title}
+                </p>
+                <p className="mt-0.5 text-xs text-slate-500">
+                  {complaint.complaintId}
+                </p>
+              </td>
 
-              <th className="px-6 py-4 text-left text-sm font-semibold text-slate-700">
-                Status
-              </th>
+              <td className="py-4 pr-4">
+                <div className="flex max-w-[260px] items-center gap-2 text-sm text-slate-600">
+                  <MapPin
+                    size={15}
+                    className="shrink-0 text-slate-400"
+                    aria-hidden="true"
+                  />
+                  <span className="line-clamp-2">{complaint.address}</span>
+                </div>
+              </td>
 
-              <th className="px-6 py-4 text-left text-sm font-semibold text-slate-700">
-                Created
-              </th>
+              <td className="py-4 pr-4">
+                <StatusBadge status={complaint.status} />
+              </td>
 
-              <th className="px-6 py-4 text-center text-sm font-semibold text-slate-700">
-                Action
-              </th>
+              <td className="py-4 pr-4 text-sm text-slate-500">
+                {dateUtils.formatDate(complaint.createdAt)}
+              </td>
+
+              <td className="py-4 text-right">
+                <Button
+                  size="sm"
+                  variant="outline"
+                  leftIcon={<Eye size={16} aria-hidden="true" />}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onViewComplaint(complaint.complaintId);
+                  }}
+                >
+                  View
+                </Button>
+              </td>
             </tr>
-          </thead>
-
-          <tbody>
-            {complaints.map((complaint) => (
-              <tr
-                key={complaint.complaintId}
-                onClick={() => onViewComplaint(complaint.complaintId)}
-                className="group cursor-pointer border-t border-slate-100 transition-colors duration-200 hover:bg-slate-50"
-              >
-                <td className="px-6 py-5">
-                  <div>
-                    <h3 className="font-semibold text-slate-900 transition-colors group-hover:text-blue-700">
-                      {complaint.title}
-                    </h3>
-
-                    <p className="mt-1 text-sm text-slate-500">
-                      {complaint.complaintId}
-                    </p>
-                  </div>
-                </td>
-
-                <td className="px-6 py-5">
-                  <div className="flex items-center gap-2 text-sm text-slate-600">
-                    <MapPin size={16} className="shrink-0" />
-
-                    <span className="line-clamp-2">{complaint.address}</span>
-                  </div>
-                </td>
-
-                <td className="px-6 py-5">
-                  <StatusBadge status={complaint.status} />
-                </td>
-
-                <td className="px-6 py-5 text-sm text-slate-600">
-                  {new Date(complaint.createdAt).toLocaleDateString()}
-                </td>
-
-                <td className="px-6 py-5 text-center">
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    leftIcon={<Eye size={16} />}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onViewComplaint(complaint.complaintId);
-                    }}
-                  >
-                    View
-                  </Button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 };

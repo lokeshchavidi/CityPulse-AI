@@ -3,6 +3,7 @@ package com.citypulseai.notification.controller;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -85,6 +86,31 @@ public class NotificationController {
                 ApiResponse.<Void>builder()
                         .success(true)
                         .message("All notifications marked as read.")
+                        .build());
+    }
+
+    @DeleteMapping("/{notificationId}")
+    public ResponseEntity<ApiResponse<Void>> deleteNotification(
+            @PathVariable String notificationId) {
+
+        notificationService.deleteNotification(notificationId);
+
+        return ResponseEntity.ok(
+                ApiResponse.<Void>builder()
+                        .success(true)
+                        .message("Notification deleted successfully.")
+                        .build());
+    }
+
+    @DeleteMapping
+    public ResponseEntity<ApiResponse<Void>> deleteAllNotifications() {
+
+        notificationService.deleteAllNotifications();
+
+        return ResponseEntity.ok(
+                ApiResponse.<Void>builder()
+                        .success(true)
+                        .message("All notifications deleted successfully.")
                         .build());
     }
 }

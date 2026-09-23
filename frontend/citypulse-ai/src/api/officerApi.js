@@ -38,10 +38,17 @@ const getDashboard = async () => {
   return response.data.data;
 };
 
+const getStatistics = async () => {
+  const response = await axiosClient.get(API_ENDPOINTS.OFFICER.STATISTICS);
+
+  return response.data.data;
+};
+
 export const officerApi = {
   getMyAssignedComplaints,
   getComplaintDetails,
   startWork,
   resolveComplaint,
   getDashboard,
+  getStatistics,
 };

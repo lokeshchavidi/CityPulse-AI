@@ -40,5 +40,13 @@ public class ComplaintResponse {
 
 	private String assignedOfficerName;
 
+	private String citizenName;
+
 	private LocalDateTime createdAt;
+
+	/**
+	 * True when automatic analysis failed and no department has been
+	 * assigned yet, so an administrator still needs to route it.
+	 */
+	private boolean needsManualAssignment;
 }

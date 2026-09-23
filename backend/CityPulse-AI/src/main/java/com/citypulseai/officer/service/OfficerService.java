@@ -7,6 +7,7 @@ import com.citypulseai.departmentmanager.dto.DepartmentComplaintDetailsResponse;
 import com.citypulseai.departmentmanager.dto.DepartmentComplaintResponse;
 import com.citypulseai.officer.dto.OfficerDashboardResponse;
 import com.citypulseai.officer.dto.ResolveComplaintRequest;
+import com.citypulseai.statistics.dto.ComplaintStatisticsResponse;
 
 public interface OfficerService {
 
@@ -21,4 +22,6 @@ public interface OfficerService {
 	        ResolveComplaintRequest request);
 	
 	OfficerDashboardResponse getDashboard();
+
+	ComplaintStatisticsResponse getStatistics();
 }

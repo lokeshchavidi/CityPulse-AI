@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
+import { LocateFixed } from "lucide-react";
 import { MapContainer, Marker, TileLayer, useMapEvents } from "react-leaflet";
 
 import "leaflet/dist/leaflet.css";
 
+import Button from "@/components/common/Button/Button";
 import configureLeafletDefaultIcon from "@/config/leaflet";
 import mapUtils from "@/utils/mapUtils";
 
@@ -16,7 +18,8 @@ const LocationMarker = ({ position, onLocationSelected }) => {
       const latitude = event.latlng.lat;
       const longitude = event.latlng.lng;
 
-      const address = (await mapUtils.reverseGeocode(latitude, longitude)) ?? "";
+      const address =
+        (await mapUtils.reverseGeocode(latitude, longitude)) ?? "";
 
       onLocationSelected({
         latitude,
@@ -59,7 +62,8 @@ const ComplaintLocationPicker = ({ value, onLocationChange }) => {
     navigator.geolocation.getCurrentPosition(
       async (geoPosition) => {
         const { latitude, longitude } = geoPosition.coords;
-        const address = (await mapUtils.reverseGeocode(latitude, longitude)) ?? "";
+        const address =
+          (await mapUtils.reverseGeocode(latitude, longitude)) ?? "";
 
         handleLocationSelected({ latitude, longitude, address });
         setLocating(false);
@@ -69,14 +73,17 @@ const ComplaintLocationPicker = ({ value, onLocationChange }) => {
     );
   };
 
+  const formatCoord = (coord) =>
+    typeof coord === "number" ? coord.toFixed(6) : "—";
+
   return (
     <div className="space-y-4">
-      <div className="overflow-hidden rounded-2xl border border-slate-200">
+      <div className="overflow-hidden rounded-xl border border-slate-200">
         <MapContainer
           center={position ?? DEFAULT_POSITION}
           zoom={13}
           scrollWheelZoom
-          className="h-64 w-full sm:h-80 lg:h-[420px]"
+          className="h-64 w-full sm:h-80 lg:h-[380px]"
         >
           <TileLayer
             attribution="&copy; OpenStreetMap contributors"
@@ -90,34 +97,44 @@ const ComplaintLocationPicker = ({ value, onLocationChange }) => {
         </MapContainer>
       </div>
 
-      <button
-        type="button"
-        onClick={useCurrentLocation}
-        disabled={locating}
-        className="text-sm font-semibold text-blue-800 hover:underline disabled:opacity-60"
-      >
-        {locating ? "Locating..." : "Use my current location"}
-      </button>
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <Button
+          type="button"
+          variant="secondary"
+          size="sm"
+          loading={locating}
+          leftIcon={<LocateFixed size={16} aria-hidden="true" />}
+          onClick={useCurrentLocation}
+          className="w-full sm:w-auto"
+        >
+          Use my current location
+        </Button>
 
-      <div className="grid gap-4 md:grid-cols-2">
-        <div className="rounded-xl bg-slate-100 p-4">
-          <p className="text-sm text-slate-500">Latitude</p>
-
-          <p className="mt-1 font-semibold">{value.latitude ?? "--"}</p>
-        </div>
-
-        <div className="rounded-xl bg-slate-100 p-4">
-          <p className="text-sm text-slate-500">Longitude</p>
-
-          <p className="mt-1 font-semibold">{value.longitude ?? "--"}</p>
-        </div>
+        <p className="text-xs leading-relaxed text-slate-500 sm:max-w-xs sm:text-right">
+          Click the map to drop a pin. Address fills automatically and can be
+          edited below.
+        </p>
       </div>
 
-      <p className="text-sm text-slate-500">
-        Click anywhere on the map to select the complaint location, or use
-        your current location. The address is filled in automatically and
-        can be edited below if needed.
-      </p>
+      <div className="grid gap-3 sm:grid-cols-2">
+        <div className="rounded-lg border border-slate-200 bg-canvas px-4 py-3">
+          <p className="text-xs font-medium uppercase tracking-wide text-slate-500">
+            Latitude
+          </p>
+          <p className="mt-1 font-mono text-sm font-semibold text-slate-800">
+            {formatCoord(value.latitude)}
+          </p>
+        </div>
+
+        <div className="rounded-lg border border-slate-200 bg-canvas px-4 py-3">
+          <p className="text-xs font-medium uppercase tracking-wide text-slate-500">
+            Longitude
+          </p>
+          <p className="mt-1 font-mono text-sm font-semibold text-slate-800">
+            {formatCoord(value.longitude)}
+          </p>
+        </div>
+      </div>
     </div>
   );
 };

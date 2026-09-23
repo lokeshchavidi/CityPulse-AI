@@ -1,35 +1,45 @@
 const variants = {
-  OPEN: "bg-blue-50 text-blue-700 ring-1 ring-blue-200",
+  OPEN: "bg-brand-50 text-brand-800 ring-brand-200",
 
-  UNDER_REVIEW: "bg-amber-50 text-amber-700 ring-1 ring-amber-200",
+  UNDER_REVIEW:
+    "bg-[var(--color-warning-bg)] text-[var(--color-warning-fg)] ring-[var(--color-warning-ring)]",
 
-  ASSIGNED: "bg-indigo-50 text-indigo-700 ring-1 ring-indigo-200",
+  ASSIGNED:
+    "bg-[var(--color-sky-bg)] text-[var(--color-sky-fg)] ring-[var(--color-sky-ring)]",
 
-  IN_PROGRESS: "bg-cyan-50 text-cyan-700 ring-1 ring-cyan-200",
+  IN_PROGRESS:
+    "bg-[var(--color-cyan-bg)] text-[var(--color-cyan-fg)] ring-[var(--color-cyan-ring)]",
 
-  RESOLVED: "bg-green-50 text-green-700 ring-1 ring-green-200",
+  RESOLVED:
+    "bg-[var(--color-success-bg)] text-[var(--color-success-fg)] ring-[var(--color-success-ring)]",
 
-  REJECTED: "bg-red-50 text-red-700 ring-1 ring-red-200",
+  REJECTED:
+    "bg-[var(--color-danger-bg)] text-[var(--color-danger-fg)] ring-[var(--color-danger-ring)]",
 
-  CLOSED: "bg-slate-100 text-slate-700 ring-1 ring-slate-200",
+  CLOSED: "bg-slate-100 text-slate-700 ring-slate-200",
 
-  CRITICAL: "bg-red-100 text-red-800 ring-1 ring-red-300",
+  CRITICAL:
+    "bg-[var(--color-danger-bg)] text-[var(--color-danger-fg)] ring-[var(--color-danger-ring)]",
 
-  HIGH: "bg-orange-100 text-orange-800 ring-1 ring-orange-300",
+  HIGH: "bg-[var(--color-orange-bg)] text-[var(--color-orange-fg)] ring-[var(--color-orange-ring)]",
 
-  MEDIUM: "bg-yellow-100 text-yellow-800 ring-1 ring-yellow-300",
+  MEDIUM:
+    "bg-[var(--color-warning-bg)] text-[var(--color-warning-fg)] ring-[var(--color-warning-ring)]",
 
-  LOW: "bg-green-100 text-green-800 ring-1 ring-green-300",
+  LOW: "bg-[var(--color-success-bg)] text-[var(--color-success-fg)] ring-[var(--color-success-ring)]",
 };
 
-const StatusBadge = ({ status }) => {
+const StatusBadge = ({ status, className = "" }) => {
+  const label = status?.replaceAll("_", " ") ?? "Unknown";
+
   return (
     <span
-      className={`inline-flex items-center justify-center rounded-full px-3 py-1 text-xs font-semibold tracking-wide whitespace-nowrap ring-inset ${
-        variants[status] ?? "bg-slate-100 text-slate-700 ring-1 ring-slate-200"
-      }`}
+      className={`inline-flex items-center justify-center rounded-md px-2.5 py-1 text-xs font-semibold tracking-wide whitespace-nowrap ring-1 ring-inset ${
+        variants[status] ?? "bg-slate-100 text-slate-700 ring-slate-200"
+      } ${className}`}
+      title={label}
     >
-      {status?.replaceAll("_", " ")}
+      {label}
     </span>
   );
 };

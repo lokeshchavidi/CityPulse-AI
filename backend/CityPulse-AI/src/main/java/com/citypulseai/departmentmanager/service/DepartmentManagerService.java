@@ -9,6 +9,7 @@ import com.citypulseai.departmentmanager.dto.DepartmentComplaintResponse;
 import com.citypulseai.departmentmanager.dto.DepartmentDashboardResponse;
 import com.citypulseai.departmentmanager.dto.OfficerResponse;
 import com.citypulseai.departmentmanager.dto.OverrideAIRecommendationRequest;
+import com.citypulseai.statistics.dto.ComplaintStatisticsResponse;
 
 import jakarta.validation.Valid;
 
@@ -25,6 +26,8 @@ public interface DepartmentManagerService {
 	ComplaintResponse assignOfficer(String complaintId, @Valid AssignOfficerRequest request);
 
 	DepartmentDashboardResponse getDashboard();
+
+	ComplaintStatisticsResponse getStatistics();
 	
 	ComplaintResponse overrideAIRecommendation(
 	        String complaintId,

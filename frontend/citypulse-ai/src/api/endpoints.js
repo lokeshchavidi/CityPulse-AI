@@ -13,6 +13,7 @@ const API_ENDPOINTS = {
   USER: {
     REGISTER: "/users/register",
     DASHBOARD: "/users/dashboard",
+    STATISTICS: "/users/statistics",
     PROFILE: "/users/profile",
     CHANGE_PASSWORD: "/users/change-password",
   },
@@ -40,6 +41,8 @@ const API_ENDPOINTS = {
     UNREAD_COUNT: "/notifications/unread/count",
     MARK_READ: (notificationId) => `/notifications/${notificationId}/read`,
     MARK_ALL_READ: "/notifications/read-all",
+    DELETE: (notificationId) => `/notifications/${notificationId}`,
+    DELETE_ALL: "/notifications",
   },
 
   OFFICER: {
@@ -48,6 +51,7 @@ const API_ENDPOINTS = {
     START_WORK: (complaintId) => `/officer/complaints/${complaintId}/start`,
     RESOLVE: (complaintId) => `/officer/complaints/${complaintId}/resolve`,
     DASHBOARD: "/officer/dashboard",
+    STATISTICS: "/officer/statistics",
   },
 
   DEPARTMENT_MANAGER: {
@@ -63,6 +67,7 @@ const API_ENDPOINTS = {
     ASSIGN_OFFICER: (complaintId) =>
       `/department-manager/complaints/${complaintId}/assign-officer`,
     DASHBOARD: "/department-manager/dashboard",
+    STATISTICS: "/department-manager/statistics",
     // NOTE: matches backend exactly — this one endpoint intentionally does
     // NOT have a "/complaints" segment, unlike its siblings above.
     OVERRIDE_AI: (complaintId) => `/department-manager/${complaintId}/override`,
@@ -70,6 +75,7 @@ const API_ENDPOINTS = {
 
   ADMIN: {
     DASHBOARD: "/admin/dashboard",
+    STATISTICS: "/admin/statistics",
     USERS: "/admin/users",
     CREATE_STAFF_USER: "/admin/users",
     USER_DETAILS: (userId) => `/admin/users/${userId}`,

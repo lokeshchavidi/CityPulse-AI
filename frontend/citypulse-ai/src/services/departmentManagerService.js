@@ -24,6 +24,10 @@ const getDashboard = async () => {
   return await departmentManagerApi.getDashboard();
 };
 
+const getStatistics = async () => {
+  return await departmentManagerApi.getStatistics();
+};
+
 const overrideAIRecommendation = async (complaintId, overridePayload) => {
   return await departmentManagerApi.overrideAIRecommendation(
     complaintId,
@@ -43,6 +47,7 @@ const departmentManagerService = {
   getAvailableOfficers,
   assignOfficer,
   getDashboard,
+  getStatistics,
   overrideAIRecommendation,
   getActiveComplaints,
   getResolvedComplaints,

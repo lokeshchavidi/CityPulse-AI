@@ -1,5 +1,9 @@
 import { createPortal } from "react-dom";
 
+/**
+ * Fixed hex colors — theme-remapped slate would make the tooltip light in
+ * dark mode and white label text would disappear.
+ */
 const Tooltip = ({ text, x, y, visible }) => {
   if (!visible) return null;
 
@@ -16,7 +20,7 @@ const Tooltip = ({ text, x, y, visible }) => {
         z-[9999]
 
         rounded-xl
-        bg-slate-900/95
+        bg-[#0f172a]
         px-3
         py-2
 
@@ -26,13 +30,12 @@ const Tooltip = ({ text, x, y, visible }) => {
         whitespace-nowrap
 
         shadow-2xl
-        shadow-black/20
+        shadow-black/30
 
         backdrop-blur-sm
 
         animate-in
         fade-in
-        zoom-in-95
         duration-150
       "
       role="tooltip"
@@ -49,7 +52,7 @@ const Tooltip = ({ text, x, y, visible }) => {
           w-2
           -translate-y-1/2
           rotate-45
-          bg-slate-900
+          bg-[#0f172a]
         "
       />
     </div>,

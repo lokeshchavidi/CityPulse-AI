@@ -20,7 +20,6 @@ const ActiveComplaints = () => {
       setLoading(true);
 
       const response = await departmentManagerService.getActiveComplaints();
-      console.log("Active API Response:", response);
 
       setComplaints(response ?? []);
     } catch (error) {
@@ -31,20 +30,28 @@ const ActiveComplaints = () => {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 md:space-y-8">
       <DashboardHeader
-        title="Active Complaints"
+        title="Active complaints"
         subtitle="Monitor complaints currently assigned to officers."
       />
 
-      <SectionCard>
+      <SectionCard
+        title="In progress work"
+        subtitle={
+          loading
+            ? "Loading active cases…"
+            : `${complaints.length} active complaint${complaints.length === 1 ? "" : "s"}`
+        }
+      >
         {loading ? (
-          <LoadingSkeleton cards={4} />
+          <LoadingSkeleton rows={5} />
         ) : (
           <ComplaintQueueTable
             complaints={complaints}
             detailBasePath="/department-manager/complaints"
-            readOnly
+            emptyTitle="No active complaints"
+            emptyDescription="Assigned and in-progress cases will show up here."
           />
         )}
       </SectionCard>

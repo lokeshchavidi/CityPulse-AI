@@ -4,6 +4,10 @@ const getDashboard = async () => {
   return await adminApi.getDashboard();
 };
 
+const getStatistics = async () => {
+  return await adminApi.getStatistics();
+};
+
 const getAllUsers = async () => {
   return await adminApi.getAllUsers();
 };
@@ -34,6 +38,7 @@ const disableUser = async (userId) => {
 
 const adminService = {
   getDashboard,
+  getStatistics,
   getAllUsers,
   getUserByUserId,
   createStaffUser,

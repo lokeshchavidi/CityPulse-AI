@@ -1,86 +1,74 @@
-import { Clock3, UserCircle2 } from "lucide-react";
+import { ArrowRight, Clock3 } from "lucide-react";
 
-import SectionCard from "@/components/dashboard/SectionCard";
+import dateUtils from "@/utils/dateUtils";
 
 const ComplaintTimeline = ({ history = [] }) => {
-  if (history.length === 0) {
-    return (
-      <SectionCard
-        title="Complaint Timeline"
-        subtitle="Track all activities performed on this complaint."
-      >
-        <div className="py-10 text-center text-slate-500">
-          No timeline available.
-        </div>
-      </SectionCard>
-    );
-  }
-
   return (
-    <SectionCard
-      title="Complaint Timeline"
-      subtitle="Track all activities performed on this complaint."
-    >
-      <div className="relative ml-3 border-l-2 border-slate-200">
-        {history.map((item, index) => (
-          <div key={item.historyId ?? index} className="relative mb-8 ml-6">
-            <div className="absolute -left-[34px] flex h-6 w-6 items-center justify-center rounded-full bg-blue-600 text-white">
-              <Clock3 size={14} />
-            </div>
-
-            <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
-              <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
-                <h3 className="text-lg font-semibold text-slate-900">
-                  {item.action}
-                </h3>
-
-                <span className="text-sm text-slate-500">
-                  {new Date(item.createdAt).toLocaleString()}
-                </span>
-              </div>
-
-              <div className="mt-4 flex items-center gap-2 text-slate-600">
-                <UserCircle2 size={18} />
-
-                <span>{item.performedBy}</span>
-              </div>
-
-              {item.remarks && (
-                <div className="mt-4 rounded-lg bg-slate-50 p-4">
-                  <p className="text-sm font-medium text-slate-500">Remarks</p>
-
-                  <p className="mt-2 text-slate-700">{item.remarks}</p>
-                </div>
-              )}
-
-              {(item.oldValue || item.newValue) && (
-                <div className="mt-5 grid gap-4 md:grid-cols-2">
-                  <div className="rounded-lg border border-slate-200 p-4">
-                    <p className="text-sm font-medium text-slate-500">
-                      Previous Value
-                    </p>
-
-                    <p className="mt-2 text-slate-700">
-                      {item.oldValue || "-"}
-                    </p>
-                  </div>
-
-                  <div className="rounded-lg border border-slate-200 p-4">
-                    <p className="text-sm font-medium text-slate-500">
-                      Updated Value
-                    </p>
-
-                    <p className="mt-2 text-slate-700">
-                      {item.newValue || "-"}
-                    </p>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-        ))}
+    <section className="rounded-xl border border-slate-200 bg-surface shadow-soft-sm">
+      <div className="border-b border-slate-200 px-5 py-4 md:px-6">
+        <h2 className="text-base font-semibold text-slate-900">Activity timeline</h2>
+        <p className="mt-0.5 text-xs text-slate-500">
+          Full audit trail of actions taken on this complaint
+        </p>
       </div>
-    </SectionCard>
+
+      <div className="p-5 md:p-6">
+        {history.length === 0 ? (
+          <div className="rounded-lg border border-dashed border-slate-300 bg-canvas px-4 py-10 text-center">
+            <p className="text-sm font-medium text-slate-700">No activity yet</p>
+            <p className="mt-1 text-xs text-slate-500">
+              Updates will appear as the complaint moves through the workflow.
+            </p>
+          </div>
+        ) : (
+          <ol className="relative space-y-0 border-l border-slate-200 pl-6">
+            {history.map((item, index) => (
+              <li key={item.historyId ?? index} className="relative pb-8 last:pb-0">
+                <span className="absolute -left-[1.95rem] flex h-7 w-7 items-center justify-center rounded-full border border-brand-200 bg-brand-50 text-brand-800">
+                  <Clock3 size={13} aria-hidden="true" />
+                </span>
+
+                <div className="rounded-lg border border-slate-200 bg-canvas p-4 transition hover:border-brand-200 hover:bg-surface">
+                  <div className="flex flex-col gap-1 sm:flex-row sm:items-start sm:justify-between">
+                    <h3 className="text-sm font-semibold text-slate-900">
+                      {item.action?.replaceAll("_", " ") || "Update"}
+                    </h3>
+                    <time className="shrink-0 text-xs text-slate-500">
+                      {dateUtils.formatDateTime(item.createdAt)}
+                    </time>
+                  </div>
+
+                  <p className="mt-1 text-xs text-slate-500">
+                    By{" "}
+                    <span className="font-medium text-slate-700">
+                      {item.performedBy || "System"}
+                    </span>
+                  </p>
+
+                  {item.remarks && (
+                    <p className="mt-3 text-sm leading-relaxed text-slate-700">
+                      {item.remarks}
+                    </p>
+                  )}
+
+                  {(item.oldValue || item.newValue) && (
+                    <div className="mt-3 flex flex-wrap items-center gap-2 text-xs">
+                      <span className="rounded-md bg-surface px-2 py-1 font-medium text-slate-600 ring-1 ring-slate-200">
+                        {item.oldValue || "—"}
+                      </span>
+                      <ArrowRight size={12} className="text-slate-400" aria-hidden="true" />
+                      <span className="rounded-md bg-brand-50 px-2 py-1 font-semibold text-brand-800 ring-1 ring-brand-200">
+                        {item.newValue || "—"}
+                      </span>
+                    </div>
+                  )}
+                </div>
+              </li>
+            ))}
+          </ol>
+        )}
+      </div>
+    </section>
   );
 };
 

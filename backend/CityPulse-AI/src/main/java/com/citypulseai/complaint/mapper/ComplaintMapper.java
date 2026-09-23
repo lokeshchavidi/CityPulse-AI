@@ -50,6 +50,11 @@ public class ComplaintMapper {
                                 ? complaint.getAssignedOfficer().getFirstName() + " "
                                         + complaint.getAssignedOfficer().getLastName()
                                 : null)
+                .citizenName(
+                        complaint.getCitizen() != null
+                                ? complaint.getCitizen().getFirstName() + " "
+                                        + complaint.getCitizen().getLastName()
+                                : null)
                 .createdAt(complaint.getCreatedAt())
                 .build();
     }

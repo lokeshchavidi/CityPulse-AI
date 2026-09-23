@@ -14,6 +14,7 @@ import Textarea from "@/components/forms/Textarea";
 
 import ComplaintInformation from "@/components/citizen/Complaint/Details/ComplaintInformation";
 import ComplaintAIAnalysis from "@/components/citizen/Complaint/Details/ComplaintAIAnalysis";
+import ComplaintStatusTracker from "@/components/citizen/Complaint/Details/ComplaintStatusTracker";
 
 import officerService from "@/services/officerService";
 import { COMPLAINT_STATUS } from "@/constants/complaintStatus";
@@ -85,7 +86,7 @@ const OfficerComplaintDetails = () => {
     }
   };
 
-  if (loading) return <LoadingSkeleton />;
+  if (loading) return <LoadingSkeleton variant="detail" />;
 
   if (!complaint) {
     return (
@@ -97,39 +98,46 @@ const OfficerComplaintDetails = () => {
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 md:space-y-8">
       <DashboardHeader
         title={`Complaint ${complaint.complaintId}`}
         subtitle="Manage the assigned complaint and update its progress."
+        action={<StatusBadge status={complaint.status} />}
       />
 
-      <SectionCard title="Citizen & Priority">
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+      <ComplaintStatusTracker status={complaint.status} />
+
+      <SectionCard title="Citizen & priority">
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           <div>
-            <p className="text-sm font-medium text-slate-500">Citizen</p>
+            <p className="text-xs font-medium uppercase tracking-wide text-slate-400">
+              Citizen
+            </p>
             <p className="mt-1 font-semibold text-slate-900">
               {complaint.citizenName}
             </p>
           </div>
 
           <div>
-            <p className="flex items-center gap-2 text-sm font-medium text-slate-500">
-              <Mail size={15} /> Email
+            <p className="flex items-center gap-1.5 text-xs font-medium uppercase tracking-wide text-slate-400">
+              <Mail size={13} aria-hidden="true" /> Email
             </p>
-            <p className="mt-1 text-slate-700">{complaint.citizenEmail}</p>
+            <p className="mt-1 text-sm text-slate-700">{complaint.citizenEmail}</p>
           </div>
 
           <div>
-            <p className="flex items-center gap-2 text-sm font-medium text-slate-500">
-              <Phone size={15} /> Phone
+            <p className="flex items-center gap-1.5 text-xs font-medium uppercase tracking-wide text-slate-400">
+              <Phone size={13} aria-hidden="true" /> Phone
             </p>
-            <p className="mt-1 text-slate-700">
+            <p className="mt-1 text-sm text-slate-700">
               {complaint.citizenPhoneNumber}
             </p>
           </div>
 
           <div>
-            <p className="text-sm font-medium text-slate-500">Priority</p>
+            <p className="text-xs font-medium uppercase tracking-wide text-slate-400">
+              Priority
+            </p>
             <div className="mt-2">
               <StatusBadge status={complaint.priority} />
             </div>
@@ -137,28 +145,47 @@ const OfficerComplaintDetails = () => {
         </div>
       </SectionCard>
 
-      <ComplaintInformation complaint={complaint} />
+      <div className="grid items-stretch gap-6 xl:grid-cols-5">
+        <div className="flex flex-col gap-6 xl:col-span-3">
+          <ComplaintImageCard complaint={complaint} />
+          <ComplaintInformation complaint={complaint} />
+        </div>
 
-      <ComplaintAIAnalysis analysis={complaint.aiAnalysis} />
+        <div className="h-full xl:col-span-2">
+          <ComplaintAIAnalysis analysis={complaint.aiAnalysis} />
+        </div>
+      </div>
 
       <SectionCard
-        title="Update Progress"
+        title="Update progress"
         subtitle="Start work or mark this complaint as resolved."
       >
         {complaint.status === COMPLAINT_STATUS.ASSIGNED && (
-          <Button
-            leftIcon={<PlayCircle size={18} />}
-            loading={actionLoading}
-            onClick={handleStartWork}
-          >
-            Start Work
-          </Button>
+          <div className="flex flex-col gap-4 rounded-lg border border-brand-100 bg-brand-50/50 p-4 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <p className="text-sm font-semibold text-slate-900">
+                Ready to begin field work
+              </p>
+              <p className="mt-1 text-xs text-slate-500">
+                Mark this complaint as in progress when you start addressing the
+                issue.
+              </p>
+            </div>
+            <Button
+              leftIcon={<PlayCircle size={18} aria-hidden="true" />}
+              loading={actionLoading}
+              onClick={handleStartWork}
+              className="w-full sm:w-auto"
+            >
+              Start work
+            </Button>
+          </div>
         )}
 
         {complaint.status === COMPLAINT_STATUS.IN_PROGRESS && (
-          <div className="space-y-4">
+          <div className="space-y-5">
             <Textarea
-              label="Resolution Remarks"
+              label="Resolution remarks"
               value={remarks}
               onChange={(e) => setRemarks(e.target.value)}
               placeholder="Describe how the issue was resolved..."
@@ -166,22 +193,25 @@ const OfficerComplaintDetails = () => {
               required
             />
 
-            <Button
-              leftIcon={<CheckCircle2 size={18} />}
-              loading={actionLoading}
-              onClick={handleResolve}
-            >
-              Mark as Resolved
-            </Button>
+            <div className="flex justify-end border-t border-slate-100 pt-4">
+              <Button
+                leftIcon={<CheckCircle2 size={18} aria-hidden="true" />}
+                loading={actionLoading}
+                onClick={handleResolve}
+                className="w-full sm:w-auto"
+              >
+                Mark as resolved
+              </Button>
+            </div>
           </div>
         )}
 
         {(complaint.status === COMPLAINT_STATUS.RESOLVED ||
           complaint.status === COMPLAINT_STATUS.CLOSED) && (
-          <p className="text-sm text-slate-500">
+          <div className="rounded-lg border border-green-200 bg-green-50/70 px-4 py-3 text-sm text-green-800">
             This complaint has already been resolved. No further action is
             needed.
-          </p>
+          </div>
         )}
       </SectionCard>
     </div>

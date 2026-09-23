@@ -29,6 +29,8 @@ import com.citypulseai.officer.dto.OfficerDashboardResponse;
 import com.citypulseai.officer.dto.ResolveComplaintRequest;
 import com.citypulseai.officer.service.OfficerService;
 import com.citypulseai.role.enums.RoleType;
+import com.citypulseai.statistics.dto.ComplaintStatisticsResponse;
+import com.citypulseai.statistics.service.ComplaintStatisticsService;
 import com.citypulseai.user.entity.User;
 
 import lombok.RequiredArgsConstructor;
@@ -44,6 +46,7 @@ public class OfficerServiceImpl implements OfficerService {
     private final DepartmentManagerMapper departmentManagerMapper;
     private final ComplaintHistoryService complaintHistoryService;
     private final NotificationService notificationService;
+    private final ComplaintStatisticsService complaintStatisticsService;
     
     @Override
     @Transactional(readOnly = true)
@@ -251,5 +254,12 @@ public class OfficerServiceImpl implements OfficerService {
                                 officer,
                                 ComplaintStatus.RESOLVED))
                 .build();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ComplaintStatisticsResponse getStatistics() {
+        User officer = currentUserService.getCurrentUser();
+        return complaintStatisticsService.getOfficerStatistics(officer);
     }
 }

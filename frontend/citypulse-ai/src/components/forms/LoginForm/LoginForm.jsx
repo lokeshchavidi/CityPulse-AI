@@ -22,7 +22,7 @@ const initialFormData = {
  * managers, and admins cannot self-register.
  */
 const LoginForm = ({
-  title = "Welcome Back",
+  title = "Welcome back",
   subtitle = "Sign in to report and track civic complaints.",
   showRegisterLink = true,
   portal = "citizen",
@@ -53,18 +53,12 @@ const LoginForm = ({
   };
 
   const resolveErrorMessage = (err) => {
-    // No response at all means the request never reached the server
-    // (backend down, wrong VITE_API_BASE_URL, CORS, offline, etc).
     if (!err?.response) {
       return "Unable to reach the server. Please check your connection and try again.";
     }
 
     const { status, data } = err.response;
 
-    // 401/400: wrong password or unknown email — both now show the same
-    // generic "Invalid credentials" message (no distinction, so an
-    // attacker can't tell which emails are registered). 403: disabled
-    // account or wrong portal, which still gets its own specific message.
     if (status === 401 || status === 400 || status === 403 || status === 404) {
       return data?.message || "Invalid credentials. Please try again.";
     }
@@ -105,23 +99,30 @@ const LoginForm = ({
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-      className="w-full max-w-md rounded-2xl bg-white p-8 shadow-xl"
+      transition={{ duration: 0.4, ease: "easeOut" }}
+      className="w-full"
     >
-      <div className="mb-8 text-center">
-        <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-blue-800 text-white">
-          <LogIn size={28} />
+      <div className="mb-8">
+        <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-brand-50 text-brand-800 ring-1 ring-brand-100">
+          <LogIn size={22} aria-hidden="true" />
         </div>
 
-        <h1 className="text-3xl font-bold text-slate-900">{title}</h1>
+        <h2 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+          {title}
+        </h2>
 
-        <p className="mt-2 text-slate-600">{subtitle}</p>
+        <p className="mt-2 text-sm leading-relaxed text-slate-600 sm:text-base">
+          {subtitle}
+        </p>
       </div>
 
       {registrationSuccess && (
-        <div className="mb-6 rounded-xl border border-green-200 bg-green-50 p-4 text-sm text-green-700">
+        <div
+          role="status"
+          className="mb-5 rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-sm font-medium text-green-800"
+        >
           Account created successfully. Please sign in.
         </div>
       )}
@@ -129,7 +130,7 @@ const LoginForm = ({
       {error && (
         <div
           role="alert"
-          className="mb-6 rounded-xl border border-red-200 bg-red-50 p-4 text-sm font-medium text-red-700"
+          className="mb-5 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700"
         >
           {error}
         </div>
@@ -161,17 +162,41 @@ const LoginForm = ({
         </Button>
       </form>
 
-      {showRegisterLink && (
-        <p className="mt-8 text-center text-sm text-slate-600">
-          Don&apos;t have an account?{" "}
-          <Link
-            to="/register"
-            className="font-semibold text-blue-800 hover:underline"
-          >
-            Create Account
-          </Link>
-        </p>
-      )}
+      <div className="mt-8 space-y-3 border-t border-slate-200 pt-6 text-center text-sm text-slate-600">
+        {showRegisterLink && (
+          <p>
+            Don&apos;t have an account?{" "}
+            <Link
+              to="/register"
+              className="font-semibold text-brand-800 hover:underline"
+            >
+              Create Account
+            </Link>
+          </p>
+        )}
+
+        {portal === "citizen" ? (
+          <p>
+            Municipal staff?{" "}
+            <Link
+              to="/officer/login"
+              className="font-semibold text-brand-800 hover:underline"
+            >
+              Open Staff Portal
+            </Link>
+          </p>
+        ) : (
+          <p>
+            Citizen access?{" "}
+            <Link
+              to="/login"
+              className="font-semibold text-brand-800 hover:underline"
+            >
+              Citizen Login
+            </Link>
+          </p>
+        )}
+      </div>
     </motion.div>
   );
 };

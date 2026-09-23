@@ -1,7 +1,9 @@
 package com.citypulseai.complaint.service.impl;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.security.core.Authentication;
@@ -10,7 +12,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.citypulseai.ai.entity.AIAnalysis;
+import com.citypulseai.ai.enums.AIAnalysisStatus;
+import com.citypulseai.ai.repository.AIAnalysisRepository;
 import com.citypulseai.ai.service.AIService;
+import com.citypulseai.ai.util.AnalysisIdGenerator;
 import com.citypulseai.cloudinary.service.CloudinaryService;
 import com.citypulseai.common.constants.AppConstants;
 import com.citypulseai.complaint.dto.AssignDepartmentRequest;
@@ -56,6 +62,8 @@ public class ComplaintServiceImpl implements ComplaintService{
 	private final CloudinaryService cloudinaryService;
 	private final DepartmentRepository departmentRepository;
 	private final AIService aiService;
+	private final AIAnalysisRepository aiAnalysisRepository;
+	private final AnalysisIdGenerator analysisIdGenerator;
 	private final ComplaintHistoryService complaintHistoryService;
 	private final NotificationService notificationService;
 	private final com.citypulseai.complaint.service.ComplaintAccessValidator complaintAccessValidator;
@@ -136,8 +144,11 @@ public class ComplaintServiceImpl implements ComplaintService{
 		// complaint by ID regardless of whether it was assigned to them or
 		// in their department. Now enforced for every role.
 		complaintAccessValidator.validateAccess(complaint, currentUser);
-		
-		return complaintMapper.toResponse(complaint);
+
+		ComplaintResponse response = complaintMapper.toResponse(complaint);
+		response.setNeedsManualAssignment(needsManualAssignment(complaintId));
+
+		return response;
 	}
 
 	@Override
@@ -156,10 +167,17 @@ public class ComplaintServiceImpl implements ComplaintService{
 	@Transactional(readOnly = true)
 	public List<ComplaintResponse> getAllComplaints() {
 		
-		List<Complaint> allComplaints = complaintRepository.findAll();
-		
+		List<Complaint> allComplaints = complaintRepository.findAllWithAssociations();
+		Set<String> needsManualAssignment = new HashSet<>(
+				aiAnalysisRepository.findComplaintIdsNeedingManualAssignment());
+
 		return allComplaints.stream()
-				.map(complaintMapper::toResponse)
+				.map(complaint -> {
+					ComplaintResponse response = complaintMapper.toResponse(complaint);
+					response.setNeedsManualAssignment(
+							needsManualAssignment.contains(complaint.getComplaintId()));
+					return response;
+				})
 				.collect(Collectors.toList());
 	}
 
@@ -216,9 +234,23 @@ public class ComplaintServiceImpl implements ComplaintService{
 			.orElseThrow(() -> new DepartmentNotFoundException(AppConstants.DEPARTMENT_NOT_FOUND));
 
 		Department oldDepartment = existingComplaint.getDepartment();
-		
+		ComplaintStatus previousStatus = existingComplaint.getStatus();
+
 		existingComplaint.setDepartment(existingDepartment);
-		
+
+		// A failed (or missing) analysis leaves the complaint OPEN, so it
+		// never enters a manager queue. Moving only those to UNDER_REVIEW
+		// puts them on this department's queue for officer assignment.
+		// A completed analysis stays OPEN so the manager can still accept
+		// or override the recommendation.
+		boolean routeFailedAnalysis = previousStatus == ComplaintStatus.OPEN
+				&& !hasCompletedAnalysis(complaintId);
+
+		if (routeFailedAnalysis) {
+			ensureFailedAnalysisRecord(existingComplaint);
+			existingComplaint.setStatus(ComplaintStatus.UNDER_REVIEW);
+		}
+
 		Complaint savedComplaint = complaintRepository.save(existingComplaint);
 
 		User admin = getCurrentUser();
@@ -230,7 +262,33 @@ public class ComplaintServiceImpl implements ComplaintService{
 				oldDepartment != null ? oldDepartment.getDepartmentName() : null,
 				existingDepartment.getDepartmentName(),
 				"Department manually reassigned by an administrator.");
-		
+
+		if (routeFailedAnalysis) {
+			complaintHistoryService.recordHistory(
+					savedComplaint,
+					ComplaintHistoryAction.STATUS_CHANGED,
+					admin,
+					previousStatus.name(),
+					ComplaintStatus.UNDER_REVIEW.name(),
+					"Status moved to under review after an administrator assigned the department.");
+		}
+
+		if (routeFailedAnalysis) {
+			List<User> managers = userRepository.findByRole_RoleTypeAndDepartment(
+					RoleType.DEPARTMENT_MANAGER,
+					existingDepartment);
+
+			for (User manager : managers) {
+				notificationService.createNotification(
+						manager,
+						savedComplaint,
+						NotificationType.GENERAL,
+						"Complaint assigned to your department",
+						"Complaint " + savedComplaint.getComplaintId()
+								+ " was assigned to your department and is ready for an officer.");
+			}
+		}
+
 		return complaintMapper.toResponse(savedComplaint);
 	}
 
@@ -320,6 +378,32 @@ public class ComplaintServiceImpl implements ComplaintService{
 				"Priority manually updated by an administrator.");
 		
 		return complaintMapper.toResponse(updatedComplaint);
+	}
+
+	private boolean needsManualAssignment(String complaintId) {
+		return aiAnalysisRepository
+				.existsByComplaint_ComplaintIdAndStatusAndComplaint_DepartmentIsNull(
+						complaintId,
+						AIAnalysisStatus.FAILED);
+	}
+
+	private boolean hasCompletedAnalysis(String complaintId) {
+		return aiAnalysisRepository.findByComplaint_ComplaintId(complaintId)
+				.map(analysis -> analysis.getStatus() == AIAnalysisStatus.COMPLETED)
+				.orElse(false);
+	}
+
+	private void ensureFailedAnalysisRecord(Complaint complaint) {
+		if (aiAnalysisRepository.existsByComplaint_ComplaintId(complaint.getComplaintId())) {
+			return;
+		}
+
+		aiAnalysisRepository.save(AIAnalysis.builder()
+				.analysisId(analysisIdGenerator.generateAnalysisId())
+				.complaint(complaint)
+				.status(AIAnalysisStatus.FAILED)
+				.remarks("Assigned manually after automatic analysis did not complete.")
+				.build());
 	}
 
 	private User getCurrentUser() {

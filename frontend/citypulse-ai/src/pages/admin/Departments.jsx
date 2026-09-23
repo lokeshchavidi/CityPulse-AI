@@ -163,22 +163,26 @@ const Departments = () => {
               return (
                 <div
                   key={department.departmentId}
-                  className="rounded-2xl border border-slate-200 p-5"
+                  className="rounded-xl border border-slate-200 bg-canvas p-5 transition hover:border-brand-200 hover:bg-surface hover:shadow-soft-sm"
                 >
-                  <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-blue-100">
-                    <Building2 size={20} className="text-blue-700" />
+                  <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-brand-50">
+                    <Building2
+                      size={20}
+                      className="text-brand-800"
+                      aria-hidden="true"
+                    />
                   </div>
 
-                  <h3 className="mt-4 font-semibold text-slate-900">
+                  <h3 className="mt-4 font-semibold tracking-tight text-slate-900">
                     {department.departmentName}
                   </h3>
 
-                  <p className="mt-1 text-sm leading-6 text-slate-500">
+                  <p className="mt-1 text-sm leading-relaxed text-slate-500">
                     {department.description}
                   </p>
 
                   <div className="mt-3 flex items-center gap-2 text-sm text-slate-600">
-                    <UsersIcon size={14} />
+                    <UsersIcon size={14} className="text-slate-400" aria-hidden="true" />
                     {counts.managers} manager{counts.managers === 1 ? "" : "s"} ·{" "}
                     {counts.officers} officer{counts.officers === 1 ? "" : "s"}
                   </div>

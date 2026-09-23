@@ -26,4 +26,8 @@ public interface NotificationService {
 
     void markAllAsRead();
 
+    void deleteNotification(String notificationId);
+
+    void deleteAllNotifications();
+
 }

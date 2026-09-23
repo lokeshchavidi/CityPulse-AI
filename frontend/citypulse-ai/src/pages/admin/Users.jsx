@@ -126,7 +126,7 @@ const Users = () => {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search by name or email..."
-              className="w-full rounded-xl border border-slate-300 py-3 pl-11 pr-4 text-sm outline-none transition-all focus:border-blue-600 focus:ring-4 focus:ring-blue-100"
+              className="w-full rounded-lg border border-slate-300 py-3 pl-11 pr-4 text-sm outline-none transition-all focus:border-brand-600 focus:ring-2 focus:ring-brand-100"
             />
           </div>
 
@@ -142,7 +142,7 @@ const Users = () => {
         </div>
 
         {loading ? (
-          <LoadingSkeleton cards={4} />
+          <LoadingSkeleton rows={6} />
         ) : filteredUsers.length === 0 ? (
           <EmptyState
             title="No users found"
@@ -153,22 +153,22 @@ const Users = () => {
             <table className="min-w-[880px] w-full">
               <thead>
                 <tr className="border-b border-slate-200 text-left">
-                  <th className="py-3 pr-4 text-sm font-semibold text-slate-600">
+                  <th className="pb-3 pr-4 text-xs font-semibold uppercase tracking-wide text-slate-500">
                     Name
                   </th>
-                  <th className="py-3 pr-4 text-sm font-semibold text-slate-600">
+                  <th className="pb-3 pr-4 text-xs font-semibold uppercase tracking-wide text-slate-500">
                     Email
                   </th>
-                  <th className="py-3 pr-4 text-sm font-semibold text-slate-600">
+                  <th className="pb-3 pr-4 text-xs font-semibold uppercase tracking-wide text-slate-500">
                     Role
                   </th>
-                  <th className="py-3 pr-4 text-sm font-semibold text-slate-600">
+                  <th className="pb-3 pr-4 text-xs font-semibold uppercase tracking-wide text-slate-500">
                     Department
                   </th>
-                  <th className="py-3 pr-4 text-sm font-semibold text-slate-600">
+                  <th className="pb-3 pr-4 text-xs font-semibold uppercase tracking-wide text-slate-500">
                     Status
                   </th>
-                  <th className="py-3 text-sm font-semibold text-slate-600">
+                  <th className="pb-3 text-xs font-semibold uppercase tracking-wide text-slate-500">
                     Actions
                   </th>
                 </tr>
@@ -185,29 +185,31 @@ const Users = () => {
                       className="group cursor-pointer border-b border-slate-100 transition-colors duration-200 hover:bg-slate-50"
                     >
                       <td className="py-4 pr-4">
-                        <span className="font-semibold text-slate-900 transition-colors group-hover:text-blue-700">
+                        <span className="font-semibold text-slate-900 transition-colors group-hover:text-brand-800">
                           {user.firstName} {user.lastName}
                         </span>
                       </td>
 
-                      <td className="py-4 pr-4 text-slate-600">{user.email}</td>
+                      <td className="py-4 pr-4 text-sm text-slate-600">
+                        {user.email}
+                      </td>
 
                       <td className="py-4 pr-4">
-                        <span className="inline-block whitespace-nowrap rounded-full bg-blue-100 px-3 py-1 text-xs font-semibold text-blue-700">
+                        <span className="inline-block whitespace-nowrap rounded-lg bg-brand-50 px-2.5 py-1 text-xs font-semibold text-brand-800">
                           {user.role?.replaceAll("_", " ")}
                         </span>
                       </td>
 
-                      <td className="py-4 pr-4 text-slate-600">
+                      <td className="py-4 pr-4 text-sm text-slate-600">
                         {user.department || "—"}
                       </td>
 
                       <td className="py-4 pr-4">
                         <span
-                          className={`inline-block whitespace-nowrap rounded-full px-3 py-1 text-xs font-semibold ${
+                          className={`inline-block whitespace-nowrap rounded-lg px-2.5 py-1 text-xs font-semibold ${
                             user.enabled
-                              ? "bg-green-100 text-green-700"
-                              : "bg-red-100 text-red-700"
+                              ? "bg-green-50 text-green-700"
+                              : "bg-red-50 text-red-700"
                           }`}
                         >
                           {user.enabled ? "Active" : "Disabled"}

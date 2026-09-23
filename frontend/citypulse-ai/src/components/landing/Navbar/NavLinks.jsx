@@ -1,61 +1,30 @@
-import { motion } from "framer-motion";
-
 const navigationItems = [
-  {
-    label: "Home",
-    id: "home",
-  },
-  {
-    label: "Platform",
-    id: "platform",
-  },
-  {
-    label: "AI Features",
-    id: "features",
-  },
-  {
-    label: "Departments",
-    id: "departments",
-  },
-  {
-    label: "Contact",
-    id: "contact",
-  },
+  { label: "Home", id: "home" },
+  { label: "Platform", id: "platform" },
+  { label: "Capabilities", id: "features" },
+  { label: "Departments", id: "departments" },
+  { label: "Contact", id: "contact" },
 ];
 
 const NavLinks = ({ activeSection, onNavigate }) => {
   return (
-    <nav className="hidden items-center gap-8 xl:flex xl:gap-10">
+    <nav className="hidden items-center gap-1 xl:flex" aria-label="Primary">
       {navigationItems.map((item) => {
         const isActive = activeSection === item.id;
 
         return (
           <button
             key={item.id}
+            type="button"
             onClick={() => onNavigate(item.id)}
-            className="group relative py-2"
+            className={`relative rounded-lg px-3.5 py-2 text-sm font-semibold transition-colors duration-200 ${
+              isActive
+                ? "bg-brand-50 text-brand-800"
+                : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
+            }`}
+            aria-current={isActive ? "true" : undefined}
           >
-            <span
-              className={`text-[15px] font-semibold tracking-wide transition-colors duration-300 ${
-                isActive
-                  ? "text-blue-800"
-                  : "text-slate-700 group-hover:text-blue-800"
-              }`}
-            >
-              {item.label}
-            </span>
-
-            <motion.span
-              layoutId="active-navbar-link"
-              className={`absolute -bottom-1 left-0 h-[3px] rounded-full bg-blue-800 ${
-                isActive ? "w-full" : "w-0"
-              }`}
-              transition={{
-                type: "spring",
-                stiffness: 500,
-                damping: 35,
-              }}
-            />
+            {item.label}
           </button>
         );
       })}

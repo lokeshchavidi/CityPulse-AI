@@ -23,6 +23,7 @@ import com.citypulseai.departmentmanager.dto.DepartmentDashboardResponse;
 import com.citypulseai.departmentmanager.dto.OfficerResponse;
 import com.citypulseai.departmentmanager.dto.OverrideAIRecommendationRequest;
 import com.citypulseai.departmentmanager.service.DepartmentManagerService;
+import com.citypulseai.statistics.dto.ComplaintStatisticsResponse;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -138,6 +139,21 @@ public class DepartmentManagerController {
 	                    .data(response)
 	                    .build());
 	}
+
+	@GetMapping("/statistics")
+	@PreAuthorize("hasRole('DEPARTMENT_MANAGER')")
+	public ResponseEntity<ApiResponse<ComplaintStatisticsResponse>> getStatistics() {
+
+	    ComplaintStatisticsResponse response =
+	            departmentManagerService.getStatistics();
+
+	    return ResponseEntity.ok(
+	            ApiResponse.<ComplaintStatisticsResponse>builder()
+	                    .success(true)
+	                    .message("Statistics retrieved successfully.")
+	                    .data(response)
+	                    .build());
+	}
 	
 	@PatchMapping("/{complaintId}/override")
 	@PreAuthorize("hasRole('DEPARTMENT_MANAGER')")
@@ -159,6 +175,7 @@ public class DepartmentManagerController {
 	}
 	
 	@GetMapping("/complaints/active")
+	@PreAuthorize("hasRole('DEPARTMENT_MANAGER')")
 	public ResponseEntity<ApiResponse<List<DepartmentComplaintResponse>>> getActiveComplaints() {
 
 	    return ResponseEntity.ok(
@@ -170,6 +187,7 @@ public class DepartmentManagerController {
 	}
 	
 	@GetMapping("/complaints/resolved")
+	@PreAuthorize("hasRole('DEPARTMENT_MANAGER')")
 	public ResponseEntity<ApiResponse<List<DepartmentComplaintResponse>>> getResolvedComplaints() {
 
 	    return ResponseEntity.ok(

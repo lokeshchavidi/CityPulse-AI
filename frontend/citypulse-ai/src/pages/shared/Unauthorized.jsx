@@ -5,23 +5,27 @@ import Button from "@/components/common/Button/Button";
 
 const Unauthorized = () => {
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-slate-50 px-6 text-center">
-      <div className="flex h-20 w-20 items-center justify-center rounded-full bg-amber-100">
-        <ShieldQuestion size={36} className="text-amber-700" />
+    <div className="flex min-h-screen flex-col items-center justify-center bg-canvas px-6 text-center">
+      <div className="flex h-16 w-16 items-center justify-center rounded-xl bg-amber-50 text-amber-700">
+        <ShieldQuestion size={28} aria-hidden="true" />
       </div>
 
-      <h1 className="mt-8 text-6xl font-extrabold text-slate-900">401</h1>
+      <p className="mt-6 text-sm font-semibold uppercase tracking-wide text-amber-700">
+        Error 401
+      </p>
 
-      <h2 className="mt-3 text-2xl font-semibold text-slate-800">
-        Sign In Required
-      </h2>
+      <h1 className="mt-2 text-3xl font-bold tracking-tight text-slate-900 md:text-4xl">
+        Sign in required
+      </h1>
 
-      <p className="mt-3 max-w-md text-slate-600">
+      <p className="mt-3 max-w-md text-sm leading-relaxed text-slate-500 md:text-base">
         Your session has expired or you need to sign in to view this page.
       </p>
 
       <Link to="/login" className="mt-8">
-        <Button leftIcon={<LogIn size={18} />}>Go to Login</Button>
+        <Button leftIcon={<LogIn size={18} aria-hidden="true" />}>
+          Go to login
+        </Button>
       </Link>
     </div>
   );

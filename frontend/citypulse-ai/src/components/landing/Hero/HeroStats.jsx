@@ -1,87 +1,73 @@
 import { motion } from "framer-motion";
-import { ArrowUpRight, BrainCircuit, CheckCircle2, Users } from "lucide-react";
+import { BrainCircuit, CheckCircle2, Users } from "lucide-react";
+
+import SectionTitle from "@/components/common/SectionTitle/SectionTitle";
 
 const statistics = [
   {
     title: "Complaints Resolved",
     value: "25K+",
-    description: "Successfully resolved citizen complaints",
+    description: "Citizen issues closed across participating departments.",
     icon: CheckCircle2,
-    iconBg: "bg-green-100",
-    iconColor: "text-green-700",
-    trend: "+18%",
-    trendColor: "text-green-600",
   },
   {
-    title: "Government Officers",
+    title: "Active Officers",
     value: "150+",
-    description: "Active officers managing complaints",
+    description: "Field officers managing assigned civic workstreams.",
     icon: Users,
-    iconBg: "bg-blue-100",
-    iconColor: "text-blue-700",
-    trend: "+12%",
-    trendColor: "text-blue-700",
   },
   {
-    title: "AI Prediction Accuracy",
+    title: "AI Classification Accuracy",
     value: "98%",
-    description: "Accurate complaint classification by AI",
+    description: "Consistent category and priority recommendations.",
     icon: BrainCircuit,
-    iconBg: "bg-violet-100",
-    iconColor: "text-violet-700",
-    trend: "+4%",
-    trendColor: "text-violet-700",
   },
 ];
 
 const HeroStats = () => {
   return (
-    <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-      {statistics.map((item, index) => {
-        const Icon = item.icon;
+    <section id="impact" className="border-b border-slate-200 bg-surface py-16 sm:py-20">
+      <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
+        <SectionTitle
+          eyebrow="Platform Impact"
+          title="Built for measurable civic outcomes"
+          description="A production-ready operating layer for municipal complaint response — transparent, auditable, and scalable."
+        />
 
-        return (
-          <motion.div
-            key={item.title}
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{
-              duration: 0.5,
-              delay: index * 0.15,
-            }}
-            className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-2 hover:border-blue-200 hover:shadow-xl"
-          >
-            <div className="flex items-center justify-between">
-              <div
-                className={`flex h-12 w-12 items-center justify-center rounded-xl ${item.iconBg}`}
+        <div className="mt-12 grid gap-5 md:grid-cols-3">
+          {statistics.map((item, index) => {
+            const Icon = item.icon;
+
+            return (
+              <motion.div
+                key={item.title}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-40px" }}
+                transition={{ duration: 0.4, delay: index * 0.08 }}
+                className="rounded-xl border border-slate-200 bg-canvas p-6 shadow-soft-sm transition duration-200 hover:border-brand-200 hover:shadow-soft-md"
               >
-                <Icon className={item.iconColor} size={22} />
-              </div>
+                <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-brand-50 text-brand-800">
+                  <Icon size={22} aria-hidden="true" />
+                </div>
 
-              <div
-                className={`flex items-center gap-1 text-sm font-semibold ${item.trendColor}`}
-              >
-                {item.trend}
-                <ArrowUpRight size={16} />
-              </div>
-            </div>
+                <p className="mt-6 text-4xl font-bold tracking-tight text-slate-900">
+                  {item.value}
+                </p>
 
-            <h2 className="mt-6 text-4xl font-extrabold tracking-tight text-slate-900 lg:text-5xl">
-              {item.value}
-            </h2>
+                <h3 className="mt-2 text-base font-semibold text-slate-900">
+                  {item.title}
+                </h3>
 
-            <h3 className="mt-2 text-lg font-semibold text-slate-900">
-              {item.title}
-            </h3>
-
-            <p className="mt-2 text-sm leading-6 text-slate-600">
-              {item.description}
-            </p>
-          </motion.div>
-        );
-      })}
-    </div>
+                <p className="mt-2 text-sm leading-relaxed text-slate-600">
+                  {item.description}
+                </p>
+              </motion.div>
+            );
+          })}
+        </div>
+      </div>
+    </section>
   );
 };
 

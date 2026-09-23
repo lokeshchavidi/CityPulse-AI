@@ -28,7 +28,9 @@ public interface UserRepository extends JpaRepository<User, Long>{
 	
 	boolean existsByEmail(String email);
 	
-	
+	boolean existsByRole_RoleTypeAndDepartment(
+	        RoleType roleType,
+	        Department department);
 	
 	Optional<User> findByUserId(String userId);
 
@@ -43,7 +45,4 @@ public interface UserRepository extends JpaRepository<User, Long>{
 	long countByRole_RoleType(RoleType roleType);
 	
 	long countByRole_RoleTypeAndEnabled(RoleType roleType, boolean enabled);
-	boolean existsByRole_RoleTypeAndDepartment(
-	        RoleType roleType,
-	        Department department);
 }

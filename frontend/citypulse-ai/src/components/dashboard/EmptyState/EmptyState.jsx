@@ -1,16 +1,29 @@
+import LightPlate from "@/components/common/LightPlate";
 import EmptyIllustration from "@/assets/illustrations/empty-state.svg";
 
 const EmptyState = ({
-  title = "No Data Available",
+  title = "No data available",
   description = "Nothing to display right now.",
+  action = null,
 }) => {
   return (
-    <div className="flex flex-col items-center justify-center py-16 text-center">
-      <img src={EmptyIllustration} alt="Empty" className="w-64 max-w-full" />
+    <div className="flex flex-col items-center justify-center py-12 text-center">
+      <LightPlate padding="md" rounded="rounded-2xl">
+        <img
+          src={EmptyIllustration}
+          alt=""
+          className="w-48 max-w-full opacity-90"
+          draggable={false}
+        />
+      </LightPlate>
 
-      <h2 className="mt-6 text-2xl font-semibold text-slate-900">{title}</h2>
+      <h2 className="mt-5 text-lg font-semibold text-slate-900">{title}</h2>
 
-      <p className="mt-3 max-w-md text-slate-500">{description}</p>
+      <p className="mt-2 max-w-sm text-sm leading-relaxed text-slate-500">
+        {description}
+      </p>
+
+      {action && <div className="mt-5">{action}</div>}
     </div>
   );
 };

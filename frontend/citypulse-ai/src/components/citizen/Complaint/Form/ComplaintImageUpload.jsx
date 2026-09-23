@@ -1,6 +1,6 @@
 import { ImagePlus, Upload, X } from "lucide-react";
 
-const ComplaintImageUpload = ({ file, onFileChange }) => {
+const ComplaintImageUpload = ({ file, onFileChange, fill = false }) => {
   const handleFileChange = (event) => {
     const selectedFile = event.target.files?.[0];
 
@@ -14,25 +14,29 @@ const ComplaintImageUpload = ({ file, onFileChange }) => {
   };
 
   return (
-    <div className="space-y-4">
+    <div className={`space-y-4 ${fill ? "flex h-full min-h-0 flex-1 flex-col" : ""}`}>
       <label
         htmlFor="complaint-image"
-        className="flex cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-slate-300 bg-slate-50 p-10 transition hover:border-blue-500 hover:bg-blue-50"
+        className={`group flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-slate-300 bg-canvas px-6 py-10 text-center transition hover:border-brand-500 hover:bg-brand-50/40 ${
+          fill ? "min-h-[220px] flex-1" : ""
+        }`}
       >
-        <ImagePlus size={48} className="mb-4 text-slate-500" />
-
-        <p className="text-lg font-semibold text-slate-700">
-          Upload Complaint Image
-        </p>
-
-        <p className="mt-2 text-sm text-slate-500">
-          JPG, PNG or JPEG (Max 10 MB)
-        </p>
-
-        <div className="mt-6 flex items-center gap-2 rounded-lg bg-blue-600 px-5 py-3 text-white">
-          <Upload size={18} />
-          Choose Image
+        <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-brand-50 text-brand-800 transition group-hover:bg-brand-100">
+          <ImagePlus size={22} aria-hidden="true" />
         </div>
+
+        <p className="mt-4 text-sm font-semibold text-slate-800">
+          Upload complaint photo
+        </p>
+
+        <p className="mt-1 text-xs leading-relaxed text-slate-500">
+          JPG or PNG, up to 10 MB
+        </p>
+
+        <span className="mt-5 inline-flex items-center gap-2 rounded-lg bg-brand-700 px-4 py-2.5 text-sm font-semibold text-white shadow-soft-sm transition group-hover:bg-brand-800">
+          <Upload size={16} aria-hidden="true" />
+          Choose image
+        </span>
 
         <input
           id="complaint-image"
@@ -44,21 +48,23 @@ const ComplaintImageUpload = ({ file, onFileChange }) => {
       </label>
 
       {file && (
-        <div className="flex items-center justify-between rounded-xl border border-green-200 bg-green-50 p-4">
-          <div>
-            <p className="font-medium text-slate-800">{file.name}</p>
-
-            <p className="text-sm text-slate-500">
-              {(file.size / 1024 / 1024).toFixed(2)} MB
+        <div className="flex items-center justify-between gap-3 rounded-xl border border-emerald-200 bg-emerald-50/70 px-4 py-3">
+          <div className="min-w-0">
+            <p className="truncate text-sm font-semibold text-slate-800">
+              {file.name}
+            </p>
+            <p className="mt-0.5 text-xs text-slate-500">
+              {(file.size / 1024 / 1024).toFixed(2)} MB selected
             </p>
           </div>
 
           <button
             type="button"
             onClick={removeFile}
-            className="rounded-lg p-2 text-red-500 transition hover:bg-red-100"
+            aria-label="Remove selected image"
+            className="shrink-0 rounded-lg p-2 text-red-600 transition hover:bg-red-100"
           >
-            <X size={20} />
+            <X size={18} aria-hidden="true" />
           </button>
         </div>
       )}

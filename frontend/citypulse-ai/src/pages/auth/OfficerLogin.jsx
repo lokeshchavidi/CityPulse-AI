@@ -1,4 +1,4 @@
-import PublicLayout from "@/layouts/PublicLayout";
+import AuthLayout from "@/layouts/AuthLayout";
 import LoginForm from "@/components/forms/LoginForm";
 
 /**
@@ -10,16 +10,14 @@ import LoginForm from "@/components/forms/LoginForm";
  */
 const OfficerLogin = () => {
   return (
-    <PublicLayout>
-      <section className="flex min-h-[calc(100vh-80px)] items-center justify-center bg-slate-50 px-4 py-12">
-        <LoginForm
-          title="Officer Portal"
-          subtitle="Sign in with your staff account to manage assigned complaints."
-          showRegisterLink={false}
-          portal="staff"
-        />
-      </section>
-    </PublicLayout>
+    <AuthLayout portal="staff">
+      <LoginForm
+        title="Staff sign in"
+        subtitle="Sign in with your municipal staff account to manage complaints."
+        showRegisterLink={false}
+        portal="staff"
+      />
+    </AuthLayout>
   );
 };
 

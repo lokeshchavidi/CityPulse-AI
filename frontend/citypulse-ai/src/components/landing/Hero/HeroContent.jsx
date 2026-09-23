@@ -1,49 +1,57 @@
+import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowRight, BrainCircuit } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 import Button from "@/components/common/Button/Button";
+
+const scrollToPlatform = () => {
+  document.getElementById("platform")?.scrollIntoView({
+    behavior: "smooth",
+    block: "start",
+  });
+};
 
 const HeroContent = () => {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 35 }}
+      initial={{ opacity: 0, y: 24 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6 }}
-      className="max-w-2xl"
+      transition={{ duration: 0.55, ease: "easeOut" }}
+      className="max-w-xl"
     >
-      {/* Badge */}
-      <div className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-4 py-2 text-sm font-semibold text-blue-800">
-        <BrainCircuit size={18} />
-        AI Powered Smart Governance
-      </div>
-
-      {/* Heading */}
-      <h1 className="mt-6 text-4xl font-extrabold leading-tight tracking-tight text-slate-900 sm:text-5xl lg:text-6xl">
-        Transforming Citizen Complaints Into
-        <span className="block text-blue-800">Smarter City Solutions.</span>
-      </h1>
-
-      {/* Description */}
-      <p className="mt-6 max-w-xl text-base leading-8 text-slate-600 sm:text-lg">
-        Report civic issues effortlessly while enabling government departments
-        to intelligently classify, prioritize, assign, and resolve complaints
-        using Artificial Intelligence with complete human oversight.
+      <p className="text-sm font-semibold uppercase tracking-[0.18em] text-brand-800">
+        Municipal Smart City Platform
       </p>
 
-      {/* CTA Buttons */}
-      <div className="mt-8 flex flex-col gap-4 sm:flex-row">
-        <Button
-          size="lg"
-          className="w-full sm:w-auto sm:min-w-[210px]"
-          rightIcon={<ArrowRight size={18} />}
-        >
-          Report Complaint
-        </Button>
+      <h1 className="mt-4 text-5xl font-bold tracking-tight text-slate-900 sm:text-6xl lg:text-[4.25rem] lg:leading-[1.05]">
+        CityPulse AI
+      </h1>
+
+      <p className="mt-5 text-xl font-semibold tracking-tight text-slate-800 sm:text-2xl">
+        Civic complaints, resolved with intelligence and oversight.
+      </p>
+
+      <p className="mt-4 max-w-lg text-base leading-relaxed text-slate-600 sm:text-lg">
+        Report issues in minutes. Departments classify, prioritize, and act
+        with AI assistance — always under human control.
+      </p>
+
+      <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center">
+        <Link to="/register" className="w-full sm:w-auto">
+          <Button
+            size="lg"
+            className="w-full sm:min-w-[200px]"
+            rightIcon={<ArrowRight size={18} aria-hidden="true" />}
+          >
+            Report a Complaint
+          </Button>
+        </Link>
 
         <Button
-          variant="secondary"
+          variant="outline"
           size="lg"
-          className="w-full sm:w-auto sm:min-w-[210px]"
+          className="w-full sm:min-w-[180px]"
+          onClick={scrollToPlatform}
         >
           Explore Platform
         </Button>

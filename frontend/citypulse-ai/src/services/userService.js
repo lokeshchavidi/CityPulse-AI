@@ -48,12 +48,17 @@ const getDashboard = async () => {
   return await userApi.getDashboard();
 };
 
+const getStatistics = async () => {
+  return await userApi.getStatistics();
+};
+
 const userService = {
   register,
   getProfile,
   updateProfile,
   changePassword,
   getDashboard,
+  getStatistics,
 };
 
 export default userService;

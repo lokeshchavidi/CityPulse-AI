@@ -12,7 +12,7 @@ const DashboardLayout = () => {
   const { collapsed, toggleSidebar } = useSidebar();
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-canvas font-sans">
       {/* Sidebar */}
       <Sidebar
         collapsed={collapsed}
@@ -22,7 +22,7 @@ const DashboardLayout = () => {
 
       {/* Main Content */}
       <div
-        className={`flex min-h-screen flex-col transition-all duration-300 ${
+        className={`flex min-h-screen flex-col transition-[margin] duration-300 ease-out ${
           collapsed ? "lg:ml-20" : "lg:ml-72"
         }`}
       >

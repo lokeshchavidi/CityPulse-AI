@@ -13,6 +13,7 @@ import com.citypulseai.ai.config.AIProperties;
 import com.citypulseai.ai.dto.AIAnalysisRequest;
 import com.citypulseai.ai.dto.AIAnalysisResponse;
 import com.citypulseai.ai.entity.AIAnalysis;
+import com.citypulseai.ai.enums.AIAnalysisStatus;
 import com.citypulseai.ai.exception.AIAnalysisException;
 import com.citypulseai.ai.mapper.AIAnalysisMapper;
 import com.citypulseai.ai.mapper.AIDepartmentMapper;
@@ -34,7 +35,6 @@ import com.citypulseai.notification.entity.NotificationType;
 import com.citypulseai.notification.service.NotificationService;
 import com.citypulseai.role.enums.RoleType;
 import com.citypulseai.user.entity.User;
-import com.citypulseai.user.exception.UserNotFoundException;
 import com.citypulseai.user.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -112,26 +112,8 @@ public class AIServiceImpl implements AIService {
             );
 
             AIAnalysis savedAnalysis = saveAnalysis(analysis);
-            
-            List<User> managers = userRepository.findByRole_RoleTypeAndDepartment(
-                    RoleType.DEPARTMENT_MANAGER,
-                    department);
 
-            if (managers.isEmpty()) {
-                throw new UserNotFoundException(
-                        "Department Manager not found for department: "
-                                + department.getDepartmentName());
-            }
-
-            User departmentManager = managers.get(0);
-            
-            notificationService.createNotification(
-                    departmentManager,
-                    complaint,
-                    NotificationType.AI_ANALYSIS_COMPLETED,
-                    NotificationMessages.NEW_COMPLAINT_ASSIGNED_TITLE,
-                    "Complaint " + complaint.getComplaintId()
-                            + " has been assigned to your department and is awaiting your review.");
+            notifyDepartmentManagers(department, complaint);
 
             notificationService.createNotification(
                     complaint.getCitizen(),
@@ -154,6 +136,13 @@ public class AIServiceImpl implements AIService {
         } catch (Exception ex) {
 
             log.error("AI analysis failed for complaint {}", complaintId, ex);
+
+            try {
+                recordFailedAnalysis(complaintId);
+            } catch (Exception recordEx) {
+                log.error("Failed to record AI analysis failure for complaint {}",
+                        complaintId, recordEx);
+            }
 
             // Previously this was fully silent: the complaint's status
             // stays OPEN, the Department Manager queue only surfaces
@@ -210,10 +199,77 @@ public class AIServiceImpl implements AIService {
 	
 	private void validateAnalysisDoesNotExist(String complaintId) {
 
+	    aiAnalysisRepository.findByComplaint_ComplaintId(complaintId)
+	            .ifPresent(existing -> {
+	                if (existing.getStatus() == AIAnalysisStatus.FAILED) {
+	                    aiAnalysisRepository.delete(existing);
+	                    aiAnalysisRepository.flush();
+	                    return;
+	                }
+
+	                throw new AIAnalysisException(
+	                        "AI analysis already exists for complaint : " + complaintId);
+	            });
+	}
+
+	/**
+	 * Keeps a durable FAILED row so an admin can tell "analysis failed"
+	 * apart from "analysis is still running", and so a later manual retry
+	 * can replace it. Skipped when a completed analysis was already saved.
+	 */
+	private void recordFailedAnalysis(String complaintId) {
+
 	    if (aiAnalysisRepository.existsByComplaint_ComplaintId(complaintId)) {
-	        throw new AIAnalysisException("AI analysis already exists for complaint : " + complaintId);
+	        return;
 	    }
 
+	    Complaint complaint = complaintRepository.findByComplaintId(complaintId).orElse(null);
+	    if (complaint == null) {
+	        return;
+	    }
+
+	    AIAnalysis failed = AIAnalysis.builder()
+	            .analysisId(analysisIdGenerator.generateAnalysisId())
+	            .complaint(complaint)
+	            .status(AIAnalysisStatus.FAILED)
+	            .remarks("Automatic analysis failed. An administrator needs to assign this complaint.")
+	            .build();
+
+	    aiAnalysisRepository.save(failed);
+	}
+
+	private void notifyDepartmentManagers(Department department, Complaint complaint) {
+
+	    List<User> managers = userRepository.findByRole_RoleTypeAndDepartment(
+	            RoleType.DEPARTMENT_MANAGER,
+	            department);
+
+	    if (managers.isEmpty()) {
+	        log.warn("No department manager for {} after analysis of complaint {}",
+	                department.getDepartmentName(), complaint.getComplaintId());
+
+	        for (User admin : userRepository.findByRole_RoleType(RoleType.ADMIN)) {
+	            notificationService.createNotification(
+	                    admin,
+	                    complaint,
+	                    NotificationType.GENERAL,
+	                    "Department manager missing",
+	                    "Complaint " + complaint.getComplaintId()
+	                            + " was routed to " + department.getDepartmentName()
+	                            + ", but that department has no manager.");
+	        }
+	        return;
+	    }
+
+	    for (User manager : managers) {
+	        notificationService.createNotification(
+	                manager,
+	                complaint,
+	                NotificationType.AI_ANALYSIS_COMPLETED,
+	                NotificationMessages.NEW_COMPLAINT_ASSIGNED_TITLE,
+	                "Complaint " + complaint.getComplaintId()
+	                        + " has been assigned to your department and is awaiting your review.");
+	    }
 	}
 	
 	private Department findSuggestedDepartment(String departmentName) {
@@ -244,6 +300,12 @@ public class AIServiceImpl implements AIService {
 	            .findByComplaint_ComplaintId(complaintId)
 	            .orElseThrow(() -> new AIAnalysisException(
 	                    "AI analysis not found for complaint: " + complaintId));
+
+	    if (analysis.getStatus() == AIAnalysisStatus.FAILED) {
+	        throw new AIAnalysisException(
+	                "AI analysis failed for complaint: " + complaintId
+	                        + ". An administrator needs to assign it manually.");
+	    }
 
 	    return aiAnalysisMapper.toResponse(analysis);
 	}

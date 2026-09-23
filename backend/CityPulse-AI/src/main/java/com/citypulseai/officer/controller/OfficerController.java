@@ -20,6 +20,7 @@ import com.citypulseai.departmentmanager.dto.DepartmentComplaintResponse;
 import com.citypulseai.officer.dto.OfficerDashboardResponse;
 import com.citypulseai.officer.dto.ResolveComplaintRequest;
 import com.citypulseai.officer.service.OfficerService;
+import com.citypulseai.statistics.dto.ComplaintStatisticsResponse;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -110,6 +111,21 @@ public class OfficerController {
                 ApiResponse.<OfficerDashboardResponse>builder()
                         .success(true)
                         .message("Officer dashboard retrieved successfully.")
+                        .data(response)
+                        .build());
+    }
+
+    @GetMapping("/statistics")
+    @PreAuthorize("hasRole('OFFICER')")
+    public ResponseEntity<ApiResponse<ComplaintStatisticsResponse>> getStatistics() {
+
+        ComplaintStatisticsResponse response =
+                officerService.getStatistics();
+
+        return ResponseEntity.ok(
+                ApiResponse.<ComplaintStatisticsResponse>builder()
+                        .success(true)
+                        .message("Statistics retrieved successfully.")
                         .data(response)
                         .build());
     }

@@ -27,26 +27,23 @@ const SidebarItem = ({
           relative
           flex
           items-center
-          rounded-xl
+          rounded-lg
           text-sm
           font-medium
           transition-all
-          duration-300
+          duration-200
 
-          ${collapsed ? "justify-center px-0 py-3" : "gap-3 px-4 py-3"}
+          ${collapsed ? "justify-center px-0 py-3" : "gap-3 px-3.5 py-2.5"}
 
           ${
             isActive
-              ? "bg-blue-700 text-white shadow-sm"
-              : "text-slate-600 hover:bg-slate-100 hover:text-blue-700"
+              ? "bg-brand-700 text-white shadow-soft-sm"
+              : "text-slate-600 hover:bg-canvas hover:text-brand-800"
           }
         `
         }
       >
-        <Icon
-          size={20}
-          className="shrink-0 transition-transform duration-200 group-hover:scale-110"
-        />
+        <Icon size={20} className="shrink-0" />
 
         {!collapsed && <span className="truncate">{label}</span>}
       </NavLink>

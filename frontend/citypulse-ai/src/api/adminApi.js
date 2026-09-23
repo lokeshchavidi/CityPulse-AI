@@ -7,6 +7,12 @@ const getDashboard = async () => {
   return response.data.data;
 };
 
+const getStatistics = async () => {
+  const response = await axiosClient.get(API_ENDPOINTS.ADMIN.STATISTICS);
+
+  return response.data.data;
+};
+
 const getAllUsers = async () => {
   const response = await axiosClient.get(API_ENDPOINTS.ADMIN.USERS);
 
@@ -51,6 +57,7 @@ const disableUser = async (userId) => {
 
 export const adminApi = {
   getDashboard,
+  getStatistics,
   getAllUsers,
   getUserByUserId,
   createStaffUser,

@@ -68,10 +68,17 @@ const getDashboard = async () => {
   return response.data.data;
 };
 
+const getStatistics = async () => {
+  const response = await axiosClient.get(API_ENDPOINTS.USER.STATISTICS);
+
+  return response.data.data;
+};
+
 export const userApi = {
   register,
   getProfile,
   updateProfile,
   changePassword,
   getDashboard,
+  getStatistics,
 };

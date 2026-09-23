@@ -19,6 +19,7 @@ import com.citypulseai.admin.dto.UpdateUserDepartmentRequest;
 import com.citypulseai.admin.dto.UserResponse;
 import com.citypulseai.admin.service.AdminService;
 import com.citypulseai.common.response.ApiResponse;
+import com.citypulseai.statistics.dto.ComplaintStatisticsResponse;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -41,6 +42,21 @@ public class AdminController {
 	            ApiResponse.<AdminDashboardResponse>builder()
 	                    .success(true)
 	                    .message("Dashboard retrieved successfully.")
+	                    .data(response)
+	                    .build());
+	}
+
+	@GetMapping("/statistics")
+	@PreAuthorize("hasRole('ADMIN')")
+	public ResponseEntity<ApiResponse<ComplaintStatisticsResponse>> getStatistics() {
+
+	    ComplaintStatisticsResponse response =
+	            adminService.getStatistics();
+
+	    return ResponseEntity.ok(
+	            ApiResponse.<ComplaintStatisticsResponse>builder()
+	                    .success(true)
+	                    .message("Statistics retrieved successfully.")
 	                    .data(response)
 	                    .build());
 	}

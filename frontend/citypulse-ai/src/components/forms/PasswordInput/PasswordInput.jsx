@@ -19,39 +19,36 @@ const PasswordInput = ({
 }) => {
   const [showPassword, setShowPassword] = useState(false);
 
-  const togglePasswordVisibility = () => {
-    setShowPassword((previous) => !previous);
-  };
-
   return (
-    <div className={className}>
-      <div className="relative">
-        <Input
-          label={label}
-          name={name}
-          type={showPassword ? "text" : "password"}
-          value={value}
-          onChange={onChange}
-          onBlur={onBlur}
-          placeholder={placeholder}
-          error={error}
-          required={required}
-          disabled={disabled}
-          autoComplete={autoComplete}
-          inputClassName="pr-12"
-          {...props}
-        />
-
+    <Input
+      label={label}
+      name={name}
+      type={showPassword ? "text" : "password"}
+      value={value}
+      onChange={onChange}
+      onBlur={onBlur}
+      placeholder={placeholder}
+      error={error}
+      required={required}
+      disabled={disabled}
+      autoComplete={autoComplete}
+      className={className}
+      trailing={
         <button
           type="button"
-          onClick={togglePasswordVisibility}
-          className="absolute right-4 top-[52px] -translate-y-1/2 text-slate-500 transition-colors duration-200 hover:text-blue-600 focus:outline-none"
-          tabIndex={-1}
+          onClick={() => setShowPassword((previous) => !previous)}
+          className="flex h-8 w-8 items-center justify-center rounded-md text-slate-500 transition-colors duration-200 hover:bg-slate-100 hover:text-brand-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-600/30"
+          aria-label={showPassword ? "Hide password" : "Show password"}
         >
-          {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+          {showPassword ? (
+            <EyeOff size={18} aria-hidden="true" />
+          ) : (
+            <Eye size={18} aria-hidden="true" />
+          )}
         </button>
-      </div>
-    </div>
+      }
+      {...props}
+    />
   );
 };
 

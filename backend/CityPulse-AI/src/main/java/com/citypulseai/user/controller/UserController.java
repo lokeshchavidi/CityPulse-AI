@@ -19,6 +19,7 @@ import com.citypulseai.user.dto.RegisterUserRequest;
 import com.citypulseai.user.dto.RegisterUserResponse;
 import com.citypulseai.user.dto.UpdateProfileRequest;
 import com.citypulseai.user.service.UserService;
+import com.citypulseai.statistics.dto.ComplaintStatisticsResponse;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -55,6 +56,20 @@ public class UserController {
 	            ApiResponse.<CitizenDashboardResponse>builder()
 	                    .success(true)
 	                    .message("Citizen dashboard retrieved successfully.")
+	                    .data(response)
+	                    .build());
+	}
+
+	@GetMapping("/statistics")
+	@PreAuthorize("hasRole('CITIZEN')")
+	public ResponseEntity<ApiResponse<ComplaintStatisticsResponse>> getStatistics() {
+
+	    ComplaintStatisticsResponse response = userService.getStatistics();
+
+	    return ResponseEntity.ok(
+	            ApiResponse.<ComplaintStatisticsResponse>builder()
+	                    .success(true)
+	                    .message("Statistics retrieved successfully.")
 	                    .data(response)
 	                    .build());
 	}

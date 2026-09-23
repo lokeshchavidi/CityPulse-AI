@@ -25,6 +25,8 @@ import com.citypulseai.user.mapper.UserMapper;
 import com.citypulseai.user.repository.UserRepository;
 import com.citypulseai.user.service.UserService;
 import com.citypulseai.user.util.UserIdGenerator;
+import com.citypulseai.statistics.dto.ComplaintStatisticsResponse;
+import com.citypulseai.statistics.service.ComplaintStatisticsService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -40,6 +42,7 @@ public class UserServiceImpl implements UserService{
 	private final UserMapper userMapper;
 	private final ComplaintRepository complaintRepository;
 	private final CurrentUserService currentUserService;
+	private final ComplaintStatisticsService complaintStatisticsService;
 
 	@Override
 	public RegisterUserResponse registerUser(RegisterUserRequest request) {
@@ -90,6 +93,13 @@ public class UserServiceImpl implements UserService{
 	                            citizen,
 	                            ComplaintStatus.RESOLVED))
 	            .build();
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public ComplaintStatisticsResponse getStatistics() {
+	    User citizen = currentUserService.getCurrentUser();
+	    return complaintStatisticsService.getCitizenStatistics(citizen);
 	}
 	
 	@Override

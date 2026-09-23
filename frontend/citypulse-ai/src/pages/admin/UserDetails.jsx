@@ -114,7 +114,7 @@ const UserDetails = () => {
     }
   };
 
-  if (loading) return <LoadingSkeleton />;
+  if (loading) return <LoadingSkeleton variant="detail" />;
 
   if (!user) {
     return (
@@ -130,7 +130,7 @@ const UserDetails = () => {
   }));
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 md:space-y-8">
       <DashboardHeader
         title={`${user.firstName} ${user.lastName}`}
         subtitle={user.userId}
@@ -141,49 +141,62 @@ const UserDetails = () => {
               leftIcon={user.enabled ? <Ban size={18} /> : <CheckCircle2 size={18} />}
               loading={statusLoading}
               onClick={handleToggleStatus}
+              className="w-full sm:w-auto"
             >
-              {user.enabled ? "Disable Account" : "Enable Account"}
+              {user.enabled ? "Disable account" : "Enable account"}
             </Button>
           )
         }
       />
 
-      <SectionCard title="User Information">
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <SectionCard title="User information">
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           <div>
-            <p className="flex items-center gap-2 text-sm font-medium text-slate-500">
-              <Mail size={15} /> Email
+            <p className="flex items-center gap-1.5 text-xs font-medium uppercase tracking-wide text-slate-400">
+              <Mail size={13} aria-hidden="true" /> Email
             </p>
-            <p className="mt-1 text-slate-900">{user.email}</p>
+            <p className="mt-1 text-sm font-medium text-slate-900">{user.email}</p>
           </div>
 
           <div>
-            <p className="flex items-center gap-2 text-sm font-medium text-slate-500">
-              <Phone size={15} /> Phone
+            <p className="flex items-center gap-1.5 text-xs font-medium uppercase tracking-wide text-slate-400">
+              <Phone size={13} aria-hidden="true" /> Phone
             </p>
-            <p className="mt-1 text-slate-900">{user.phoneNumber}</p>
-          </div>
-
-          <div>
-            <p className="text-sm font-medium text-slate-500">Role</p>
-            <p className="mt-1 font-semibold text-slate-900">
-              {user.role?.replaceAll("_", " ")}
+            <p className="mt-1 text-sm font-medium text-slate-900">
+              {user.phoneNumber}
             </p>
           </div>
 
           <div>
-            <p className="text-sm font-medium text-slate-500">Department</p>
-            <p className="mt-1 text-slate-900">{user.department || "—"}</p>
+            <p className="text-xs font-medium uppercase tracking-wide text-slate-400">
+              Role
+            </p>
+            <p className="mt-1">
+              <span className="inline-block rounded-lg bg-brand-50 px-2.5 py-1 text-xs font-semibold text-brand-800">
+                {user.role?.replaceAll("_", " ")}
+              </span>
+            </p>
           </div>
 
           <div>
-            <p className="text-sm font-medium text-slate-500">Status</p>
+            <p className="text-xs font-medium uppercase tracking-wide text-slate-400">
+              Department
+            </p>
+            <p className="mt-1 text-sm font-medium text-slate-900">
+              {user.department || "—"}
+            </p>
+          </div>
+
+          <div>
+            <p className="text-xs font-medium uppercase tracking-wide text-slate-400">
+              Status
+            </p>
             <p className="mt-1">
               <span
-                className={`inline-block whitespace-nowrap rounded-full px-3 py-1 text-xs font-semibold ${
+                className={`inline-block whitespace-nowrap rounded-lg px-2.5 py-1 text-xs font-semibold ${
                   user.enabled
-                    ? "bg-green-100 text-green-700"
-                    : "bg-red-100 text-red-700"
+                    ? "bg-green-50 text-green-700"
+                    : "bg-red-50 text-red-700"
                 }`}
               >
                 {user.enabled ? "Active" : "Disabled"}
@@ -192,10 +205,10 @@ const UserDetails = () => {
           </div>
 
           <div>
-            <p className="flex items-center gap-2 text-sm font-medium text-slate-500">
-              <CalendarDays size={15} /> Joined
+            <p className="flex items-center gap-1.5 text-xs font-medium uppercase tracking-wide text-slate-400">
+              <CalendarDays size={13} aria-hidden="true" /> Joined
             </p>
-            <p className="mt-1 text-slate-900">
+            <p className="mt-1 text-sm font-medium text-slate-900">
               {dateUtils.formatDate(user.createdAt)}
             </p>
           </div>

@@ -1,1 +1,65 @@
 @import "tailwindcss";
+@import "./styles/globals.css";
+
+/* Class-based dark mode for ThemeContext (html.dark) */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/*
+ * Tailwind v4 theme bridge — maps design tokens to utilities.
+ * Source tokens live in variables.css (:root / .dark).
+ */
+@theme {
+  --font-sans: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+
+  --color-brand-50: var(--brand-50);
+  --color-brand-100: var(--brand-100);
+  --color-brand-200: var(--brand-200);
+  --color-brand-400: var(--brand-400);
+  --color-brand-500: var(--brand-500);
+  --color-brand-600: var(--brand-600);
+  --color-brand-700: var(--brand-700);
+  --color-brand-800: var(--brand-800);
+  --color-brand-900: var(--brand-900);
+
+  --color-surface: var(--surface);
+  --color-canvas: var(--background);
+  --color-foreground: var(--text-primary);
+  --color-muted: var(--text-muted);
+  --color-border: var(--border);
+
+  --color-slate-50: var(--slate-50);
+  --color-slate-100: var(--slate-100);
+  --color-slate-200: var(--slate-200);
+  --color-slate-300: var(--slate-300);
+  --color-slate-400: var(--slate-400);
+  --color-slate-500: var(--slate-500);
+  --color-slate-600: var(--slate-600);
+  --color-slate-700: var(--slate-700);
+  --color-slate-800: var(--slate-800);
+  --color-slate-900: var(--slate-900);
+  --color-slate-950: var(--slate-950);
+
+  /* Status tint utilities track theme tokens */
+  --color-red-50: var(--color-danger-bg);
+  --color-red-100: var(--color-danger-bg);
+  --color-green-50: var(--color-success-bg);
+  --color-green-100: var(--color-success-bg);
+  --color-amber-50: var(--color-warning-bg);
+  --color-amber-100: var(--color-warning-bg);
+  --color-orange-50: var(--color-orange-bg);
+  --color-orange-100: var(--color-orange-bg);
+  --color-emerald-50: var(--color-emerald-bg);
+  --color-sky-50: var(--color-sky-bg);
+  --color-cyan-50: var(--color-cyan-bg);
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 18px;
+  --radius-2xl: 24px;
+
+  --shadow-soft-sm: var(--shadow-sm);
+  --shadow-soft-md: var(--shadow-md);
+  --shadow-soft-lg: var(--shadow-lg);
+}

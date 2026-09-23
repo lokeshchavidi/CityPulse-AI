@@ -20,12 +20,17 @@ const getDashboard = async () => {
   return await officerApi.getDashboard();
 };
 
+const getStatistics = async () => {
+  return await officerApi.getStatistics();
+};
+
 const officerService = {
   getMyAssignedComplaints,
   getComplaintDetails,
   startWork,
   resolveComplaint,
   getDashboard,
+  getStatistics,
 };
 
 export default officerService;

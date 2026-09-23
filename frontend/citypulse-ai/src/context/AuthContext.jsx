@@ -125,6 +125,7 @@ export const AuthProvider = ({ children }) => {
   const register = async (registerRequest) => {
     return await userService.register(registerRequest);
   };
+
   /**
    * Reload the authenticated user's profile.
    * Used after updating profile information.
@@ -132,11 +133,11 @@ export const AuthProvider = ({ children }) => {
   const refreshUser = async () => {
     try {
       const updatedUser = await userService.getProfile();
- 
+
       storageUtils.setUser(updatedUser);
- 
+
       setUser(updatedUser);
- 
+
       return updatedUser;
     } catch (error) {
       console.error(error);
@@ -161,7 +162,9 @@ export const AuthProvider = ({ children }) => {
     login,
     loginAsStaff,
     register,
+
     refreshUser,
+
     logout,
   };
 

@@ -50,6 +50,14 @@ const getDashboard = async () => {
   return response.data.data;
 };
 
+const getStatistics = async () => {
+  const response = await axiosClient.get(
+    API_ENDPOINTS.DEPARTMENT_MANAGER.STATISTICS,
+  );
+
+  return response.data.data;
+};
+
 const overrideAIRecommendation = async (complaintId, overrideRequest) => {
   const response = await axiosClient.patch(
     API_ENDPOINTS.DEPARTMENT_MANAGER.OVERRIDE_AI(complaintId),
@@ -84,5 +92,6 @@ export const departmentManagerApi = {
   getAvailableOfficers,
   assignOfficer,
   getDashboard,
+  getStatistics,
   overrideAIRecommendation,
 };

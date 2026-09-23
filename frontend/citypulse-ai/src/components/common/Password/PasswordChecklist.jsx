@@ -16,7 +16,7 @@ const ChecklistItem = ({ passed, label }) => (
 
 const PasswordChecklist = ({ requirements }) => {
   return (
-    <div className="space-y-2 rounded-xl border border-slate-200 bg-slate-50 p-4">
+    <div className="space-y-2 rounded-lg border border-slate-200 bg-canvas p-4">
       <ChecklistItem
         passed={requirements.minLength}
         label="Minimum 8 characters"

@@ -35,7 +35,7 @@ const Select = ({
           className={`
             w-full
             appearance-none
-            rounded-xl
+            rounded-lg
             border
             px-4
             py-3
@@ -49,13 +49,13 @@ const Select = ({
             ${
               error
                 ? "border-red-500 focus:border-red-500 focus:ring-2 focus:ring-red-100"
-                : "border-slate-300 focus:border-blue-600 focus:ring-2 focus:ring-blue-100"
+                : "border-slate-300 focus:border-brand-600 focus:ring-2 focus:ring-brand-100"
             }
 
             ${
               disabled
                 ? "cursor-not-allowed bg-slate-100 text-slate-400"
-                : "bg-white"
+                : "bg-surface"
             }
           `}
           {...props}

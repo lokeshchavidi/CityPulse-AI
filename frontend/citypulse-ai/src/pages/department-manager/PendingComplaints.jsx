@@ -30,19 +30,28 @@ const PendingComplaints = () => {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 md:space-y-8">
       <DashboardHeader
-        title="Complaint Queue"
+        title="Complaint queue"
         subtitle="Every complaint routed to your department, across all stages."
       />
 
-      <SectionCard>
+      <SectionCard
+        title="Department queue"
+        subtitle={
+          loading
+            ? "Loading complaints…"
+            : `${queue.length} complaint${queue.length === 1 ? "" : "s"} in queue`
+        }
+      >
         {loading ? (
-          <LoadingSkeleton cards={4} />
+          <LoadingSkeleton rows={5} />
         ) : (
           <ComplaintQueueTable
             complaints={queue}
             detailBasePath="/department-manager/complaints"
+            emptyTitle="Queue is clear"
+            emptyDescription="New complaints routed to your department will appear here."
           />
         )}
       </SectionCard>

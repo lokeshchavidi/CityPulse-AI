@@ -128,5 +128,36 @@ public class NotificationServiceImpl implements NotificationService{
 	    notificationRepository.saveAll(notifications);
 	}
 
-	
+	@Override
+	@Transactional
+	public void deleteNotification(String notificationId) {
+
+	    User currentUser = currentUserService.getCurrentUser();
+
+	    Notification notification = notificationRepository
+	            .findByNotificationId(notificationId)
+	            .orElseThrow(() ->
+	                    new NotificationNotFoundException(
+	                            "Notification not found with ID: "
+	                                    + notificationId));
+
+	    if (!notification.getRecipient().getUserId()
+	            .equals(currentUser.getUserId())) {
+
+	        throw new AccessDeniedException(
+	                "You are not authorized to delete this notification.");
+	    }
+
+	    notificationRepository.delete(notification);
+	}
+
+	@Override
+	@Transactional
+	public void deleteAllNotifications() {
+
+	    User currentUser = currentUserService.getCurrentUser();
+
+	    notificationRepository.deleteByRecipient(currentUser);
+	}
+
 }

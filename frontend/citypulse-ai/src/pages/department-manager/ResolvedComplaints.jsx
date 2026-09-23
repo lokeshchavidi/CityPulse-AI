@@ -30,20 +30,28 @@ const ResolvedComplaints = () => {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 md:space-y-8">
       <DashboardHeader
-        title="Resolved Complaints"
+        title="Resolved complaints"
         subtitle="View complaints successfully resolved by your department."
       />
 
-      <SectionCard>
+      <SectionCard
+        title="Closed cases"
+        subtitle={
+          loading
+            ? "Loading resolved cases…"
+            : `${complaints.length} resolved complaint${complaints.length === 1 ? "" : "s"}`
+        }
+      >
         {loading ? (
-          <LoadingSkeleton cards={4} />
+          <LoadingSkeleton rows={5} />
         ) : (
           <ComplaintQueueTable
             complaints={complaints}
             detailBasePath="/department-manager/complaints"
-            readOnly
+            emptyTitle="No resolved complaints yet"
+            emptyDescription="Resolved department cases will appear in this list."
           />
         )}
       </SectionCard>

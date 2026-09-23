@@ -6,10 +6,13 @@ import com.citypulseai.admin.dto.AdminDashboardResponse;
 import com.citypulseai.admin.dto.CreateStaffUserRequest;
 import com.citypulseai.admin.dto.UpdateUserDepartmentRequest;
 import com.citypulseai.admin.dto.UserResponse;
+import com.citypulseai.statistics.dto.ComplaintStatisticsResponse;
 
 public interface AdminService {
 
 	AdminDashboardResponse getDashboard();
+
+	ComplaintStatisticsResponse getStatistics();
 	
 	List<UserResponse> getAllUsers();
 	

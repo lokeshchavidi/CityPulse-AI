@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Mail, MapPin, Phone, Send, MessageCircle } from "lucide-react";
+import { Mail, MapPin, Phone, Send } from "lucide-react";
 import toast from "react-hot-toast";
 
 import Input from "@/components/forms/Input/Input";
 import Textarea from "@/components/forms/Textarea/Textarea";
 import Button from "@/components/common/Button/Button";
+import SectionTitle from "@/components/common/SectionTitle/SectionTitle";
 
+import LightPlate from "@/components/common/LightPlate";
 import ContactSupport from "@/assets/illustrations/contact-support.svg";
 
 const contactDetails = [
@@ -47,7 +49,7 @@ const Contact = () => {
 
     setSubmitting(true);
 
-    // TODO: wire to a real support/contact endpoint once available.
+    // Client-only acknowledgment until a contact API exists.
     setTimeout(() => {
       setSubmitting(false);
       setForm(initialForm);
@@ -56,60 +58,49 @@ const Contact = () => {
   };
 
   return (
-    <section id="contact" className="bg-slate-50 py-16 sm:py-20 lg:py-24">
-      <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-10">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="mx-auto max-w-3xl text-center"
-        >
-          <div className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-4 py-2 text-sm font-semibold text-blue-800">
-            <MessageCircle size={18} />
-            Get in Touch
-          </div>
+    <section id="contact" className="bg-surface py-16 sm:py-20 lg:py-24">
+      <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
+        <SectionTitle
+          eyebrow="Contact"
+          title="Need help with CityPulse AI?"
+          description="Reach our support team for platform access, technical issues, or department onboarding."
+        />
 
-          <h2 className="mt-6 text-3xl font-extrabold leading-tight text-slate-900 sm:text-4xl lg:text-5xl">
-            Questions About
-            <span className="block text-blue-800">CityPulse AI?</span>
-          </h2>
-
-          <p className="mt-6 text-base leading-8 text-slate-600 sm:text-lg">
-            Reach out to our support team for platform access, technical
-            issues, or department onboarding.
-          </p>
-        </motion.div>
-
-        <div className="mt-16 grid gap-10 lg:grid-cols-2 lg:gap-16">
+        <div className="mt-14 grid gap-10 lg:grid-cols-2 lg:gap-14">
           <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-40px" }}
+            transition={{ duration: 0.45 }}
             className="flex flex-col"
           >
             <div className="relative mx-auto w-full max-w-sm lg:mx-0">
-              <div className="absolute inset-0 rounded-full bg-blue-100/40 blur-3xl" />
-              <img
-                src={ContactSupport}
-                alt="Contact CityPulse AI Support"
-                className="relative z-10 mx-auto w-full object-contain"
-                draggable={false}
-              />
+              <div className="absolute inset-8 rounded-full bg-brand-100/40 blur-3xl" />
+              <LightPlate
+                padding="lg"
+                rounded="rounded-2xl"
+                className="relative z-10 w-full"
+              >
+                <img
+                  src={ContactSupport}
+                  alt="Contact CityPulse AI support"
+                  className="mx-auto w-full object-contain"
+                  draggable={false}
+                />
+              </LightPlate>
             </div>
 
-            <div className="mt-8 space-y-4">
+            <div className="mt-8 space-y-3">
               {contactDetails.map((item) => {
                 const Icon = item.icon;
 
                 return (
                   <div
                     key={item.label}
-                    className="flex items-center gap-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm"
+                    className="flex items-center gap-4 rounded-xl border border-slate-200 bg-canvas p-4"
                   >
-                    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-blue-100">
-                      <Icon className="text-blue-700" size={20} />
+                    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-brand-50 text-brand-800">
+                      <Icon size={18} aria-hidden="true" />
                     </div>
 
                     <div>
@@ -127,12 +118,13 @@ const Contact = () => {
           </motion.div>
 
           <motion.form
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-40px" }}
+            transition={{ duration: 0.45, delay: 0.05 }}
             onSubmit={handleSubmit}
-            className="space-y-5 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8"
+            className="space-y-5 rounded-xl border border-slate-200 bg-canvas p-6 shadow-soft-sm sm:p-8"
+            noValidate
           >
             <Input
               label="Full Name"
@@ -167,7 +159,7 @@ const Contact = () => {
               size="lg"
               fullWidth
               loading={submitting}
-              rightIcon={<Send size={18} />}
+              rightIcon={<Send size={18} aria-hidden="true" />}
             >
               Send Message
             </Button>

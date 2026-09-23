@@ -9,21 +9,27 @@ import CitizenDashboardPage from "@/pages/citizen/Dashboard";
 import CreateComplaintPage from "@/pages/citizen/CreateComplaint";
 import MyComplaintsPage from "@/pages/citizen/MyComplaints";
 import CitizenComplaintDetailsPage from "@/pages/citizen/ComplaintDetails";
+import CitizenStatisticsPage from "@/pages/citizen/Statistics";
 
 import OfficerDashboardPage from "@/pages/officer/Dashboard";
 import AssignedComplaintsPage from "@/pages/officer/AssignedComplaints";
 import OfficerComplaintDetailsPage from "@/pages/officer/ComplaintDetails";
+import OfficerStatisticsPage from "@/pages/officer/Statistics";
 
 import DepartmentManagerDashboardPage from "@/pages/department-manager/Dashboard";
 import ComplaintQueuePage from "@/pages/department-manager/PendingComplaints";
 import ReviewComplaintPage from "@/pages/department-manager/ReviewComplaint";
 import OfficersPage from "@/pages/department-manager/Officers";
+import DepartmentManagerStatisticsPage from "@/pages/department-manager/Statistics";
 
 import AdminDashboardPage from "@/pages/admin/Dashboard";
 import UsersPage from "@/pages/admin/Users";
 import CreateStaffUserPage from "@/pages/admin/CreateStaffUser";
 import UserDetailsPage from "@/pages/admin/UserDetails";
 import DepartmentsPage from "@/pages/admin/Departments";
+import AdminAllComplaintsPage from "@/pages/admin/AllComplaints";
+import AdminComplaintDetailsPage from "@/pages/admin/ComplaintDetails";
+import AdminStatisticsPage from "@/pages/admin/Statistics";
 
 import ProfilePage from "@/pages/shared/Profile";
 import NotificationsPage from "@/pages/shared/Notifications";
@@ -135,6 +141,15 @@ const AppRoutes = () => {
           }
         />
 
+        <Route
+          path="/citizen/statistics"
+          element={
+            <RoleRoute allowedRoles={[ROLES.CITIZEN]}>
+              <CitizenStatisticsPage />
+            </RoleRoute>
+          }
+        />
+
         {/* Officer */}
         <Route
           path="/officer/dashboard"
@@ -159,6 +174,15 @@ const AppRoutes = () => {
           element={
             <RoleRoute allowedRoles={[ROLES.OFFICER]}>
               <OfficerComplaintDetailsPage />
+            </RoleRoute>
+          }
+        />
+
+        <Route
+          path="/officer/statistics"
+          element={
+            <RoleRoute allowedRoles={[ROLES.OFFICER]}>
+              <OfficerStatisticsPage />
             </RoleRoute>
           }
         />
@@ -218,12 +242,48 @@ const AppRoutes = () => {
           }
         />
 
+        <Route
+          path="/department-manager/statistics"
+          element={
+            <RoleRoute allowedRoles={[ROLES.DEPARTMENT_MANAGER]}>
+              <DepartmentManagerStatisticsPage />
+            </RoleRoute>
+          }
+        />
+
         {/* Admin */}
         <Route
           path="/admin/dashboard"
           element={
             <RoleRoute allowedRoles={[ROLES.ADMIN]}>
               <AdminDashboardPage />
+            </RoleRoute>
+          }
+        />
+
+        <Route
+          path="/admin/complaints"
+          element={
+            <RoleRoute allowedRoles={[ROLES.ADMIN]}>
+              <AdminAllComplaintsPage />
+            </RoleRoute>
+          }
+        />
+
+        <Route
+          path="/admin/complaints/:id"
+          element={
+            <RoleRoute allowedRoles={[ROLES.ADMIN]}>
+              <AdminComplaintDetailsPage />
+            </RoleRoute>
+          }
+        />
+
+        <Route
+          path="/admin/statistics"
+          element={
+            <RoleRoute allowedRoles={[ROLES.ADMIN]}>
+              <AdminStatisticsPage />
             </RoleRoute>
           }
         />

@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { MapPin, Send } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { ArrowLeft, FilePlus2, ImagePlus, MapPin, Send } from "lucide-react";
 import toast from "react-hot-toast";
 
 import Button from "@/components/common/Button/Button";
+import SectionCard from "@/components/dashboard/SectionCard";
 import Input from "@/components/forms/Input";
 import Textarea from "@/components/forms/Textarea";
 
@@ -79,7 +80,8 @@ const ComplaintForm = () => {
     if (!formData.description.trim()) {
       validationErrors.description = "Complaint description is required.";
     } else if (formData.description.length > 1000) {
-      validationErrors.description = "Description cannot exceed 1000 characters.";
+      validationErrors.description =
+        "Description cannot exceed 1000 characters.";
     }
 
     if (!formData.address.trim()) {
@@ -135,51 +137,114 @@ const ComplaintForm = () => {
   };
 
   return (
-    <div className="mx-auto max-w-6xl">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-slate-900">Create Complaint</h1>
+    <div className="mx-auto max-w-5xl space-y-6">
+      <div className="flex flex-col gap-4 border-b border-slate-200 pb-5">
+        <Link
+          to="/citizen/dashboard"
+          className="inline-flex w-fit items-center gap-1.5 text-sm font-semibold text-slate-500 transition hover:text-brand-800"
+        >
+          <ArrowLeft size={16} aria-hidden="true" />
+          Back to dashboard
+        </Link>
 
-        <p className="mt-2 text-slate-600">
-          Report civic issues by providing accurate details and location.
-        </p>
+        <div className="flex items-start gap-3">
+          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-brand-50 text-brand-800">
+            <FilePlus2 size={20} aria-hidden="true" />
+          </div>
+          <div>
+            <h1 className="text-2xl font-bold tracking-tight text-slate-900 md:text-3xl">
+              Create complaint
+            </h1>
+            <p className="mt-1 max-w-2xl text-sm leading-relaxed text-slate-500">
+              Describe the issue, pin its location, and attach a clear photo so
+              the right department can act quickly.
+            </p>
+          </div>
+        </div>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-8">
-        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-          <h2 className="mb-6 text-xl font-semibold text-slate-900">
-            Complaint Information
-          </h2>
+      <form onSubmit={handleSubmit} className="space-y-6">
+        {/* Details + photo share a row; map stays full-width below (avoids tall/short gap) */}
+        <div className="grid items-stretch gap-6 xl:grid-cols-5">
+          <div className="xl:col-span-3">
+            <SectionCard
+              title="Complaint details"
+              subtitle="Keep the title short and the description specific."
+              className="h-full"
+            >
+              <div className="space-y-5">
+                <div>
+                  <Input
+                    label="Complaint title"
+                    name="title"
+                    required
+                    value={formData.title}
+                    onChange={handleChange}
+                    placeholder="Ex: Large pothole on Main Road"
+                    error={errors.title}
+                    maxLength={150}
+                  />
+                  <p className="mt-1.5 text-right text-xs text-slate-400">
+                    {formData.title.length}/150
+                  </p>
+                </div>
 
-          <div className="space-y-6">
-            <Input
-              label="Complaint Title"
-              name="title"
-              required
-              value={formData.title}
-              onChange={handleChange}
-              placeholder="Ex: Large pothole on Main Road"
-              error={errors.title}
-            />
+                <div>
+                  <Textarea
+                    label="Description"
+                    name="description"
+                    required
+                    rows={6}
+                    value={formData.description}
+                    onChange={handleChange}
+                    placeholder="Describe what you saw, when it started, and any risks to the public..."
+                    error={errors.description}
+                    maxLength={1000}
+                  />
+                  <p className="mt-1.5 text-right text-xs text-slate-400">
+                    {formData.description.length}/1000
+                  </p>
+                </div>
+              </div>
+            </SectionCard>
+          </div>
 
-            <Textarea
-              label="Description"
-              name="description"
-              required
-              rows={6}
-              value={formData.description}
-              onChange={handleChange}
-              placeholder="Describe the issue clearly..."
-              error={errors.description}
-            />
+          <div className="h-full xl:col-span-2">
+            <SectionCard
+              title="Photo evidence"
+              subtitle="A clear image helps verification."
+              className="flex h-full flex-col"
+              bodyClassName="flex flex-1 flex-col"
+              action={
+                <span className="inline-flex items-center gap-1.5 text-xs font-medium text-slate-500">
+                  <ImagePlus size={14} aria-hidden="true" />
+                  Required
+                </span>
+              }
+            >
+              <ComplaintImageUpload
+                file={formData.image}
+                onFileChange={handleImageChange}
+                fill
+              />
+
+              {errors.image && (
+                <p className="mt-3 text-sm text-red-600">{errors.image}</p>
+              )}
+            </SectionCard>
           </div>
         </div>
 
-        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-          <h2 className="mb-6 flex items-center gap-2 text-xl font-semibold">
-            <MapPin size={22} />
-            Location
-          </h2>
-
+        <SectionCard
+          title="Location"
+          subtitle="Click the map or use your current location."
+          action={
+            <span className="inline-flex items-center gap-1.5 text-xs font-medium text-slate-500">
+              <MapPin size={14} aria-hidden="true" />
+              Required
+            </span>
+          }
+        >
           <ComplaintLocationPicker
             value={formData}
             onLocationChange={handleLocationChange}
@@ -189,40 +254,40 @@ const ComplaintForm = () => {
             <p className="mt-3 text-sm text-red-600">{errors.location}</p>
           )}
 
-          <div className="mt-6">
+          <div className="mt-5">
             <Input
               label="Address"
               name="address"
               required
               value={formData.address}
               onChange={handleChange}
-              placeholder="Selected address"
+              placeholder="Street, landmark, or area"
               error={errors.address}
             />
           </div>
-        </div>
+        </SectionCard>
 
-        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-          <h2 className="mb-6 text-xl font-semibold">Upload Evidence</h2>
+        <div className="flex flex-col-reverse gap-3 rounded-xl border border-slate-200 bg-surface p-4 shadow-soft-sm sm:flex-row sm:items-center sm:justify-between sm:px-6">
+          <p className="text-center text-xs text-slate-500 sm:text-left">
+            Your report is routed after AI classification and manager review.
+          </p>
 
-          <ComplaintImageUpload
-            file={formData.image}
-            onFileChange={handleImageChange}
-          />
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+            <Link to="/citizen/dashboard" className="w-full sm:w-auto">
+              <Button type="button" variant="outline" className="w-full sm:w-auto">
+                Cancel
+              </Button>
+            </Link>
 
-          {errors.image && (
-            <p className="mt-3 text-sm text-red-600">{errors.image}</p>
-          )}
-        </div>
-
-        <div className="flex justify-end">
-          <Button
-            type="submit"
-            loading={submitting}
-            leftIcon={<Send size={18} />}
-          >
-            Submit Complaint
-          </Button>
+            <Button
+              type="submit"
+              loading={submitting}
+              leftIcon={<Send size={18} aria-hidden="true" />}
+              className="w-full sm:w-auto"
+            >
+              Submit complaint
+            </Button>
+          </div>
         </div>
       </form>
     </div>
