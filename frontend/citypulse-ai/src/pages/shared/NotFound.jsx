@@ -2,8 +2,18 @@ import { Link } from "react-router-dom";
 import { Home, MapPinOff } from "lucide-react";
 
 import Button from "@/components/common/Button/Button";
+import useAuth from "@/hooks/useAuth";
+import { ROLE_DASHBOARD_PATH } from "@/constants/roles";
 
 const NotFound = () => {
+  const { isAuthenticated, user } = useAuth();
+
+  const homePath = isAuthenticated
+    ? ROLE_DASHBOARD_PATH[user?.role] ?? "/citizen/dashboard"
+    : "/";
+
+  const homeLabel = isAuthenticated ? "Back to dashboard" : "Back to home";
+
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-canvas px-6 text-center">
       <div className="flex h-16 w-16 items-center justify-center rounded-xl bg-brand-50 text-brand-800">
@@ -22,9 +32,9 @@ const NotFound = () => {
         The page you're looking for doesn't exist or may have been moved.
       </p>
 
-      <Link to="/" className="mt-8">
+      <Link to={homePath} replace className="mt-8">
         <Button leftIcon={<Home size={18} aria-hidden="true" />}>
-          Back to home
+          {homeLabel}
         </Button>
       </Link>
     </div>

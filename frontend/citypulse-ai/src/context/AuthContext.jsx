@@ -7,36 +7,18 @@ import storageUtils from "@/utils/storageUtils";
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
-  const [accessToken, setAccessToken] = useState(null); // used to store the jwt
-  const [user, setUser] = useState(null); // use to store the user data when profile is loaded
-  const [loading, setLoading] = useState(true); // Tracks the progress of authentication-related operations.
+  // Hydrate from localStorage so protected pages can render immediately
+  // while the token is revalidated in the background.
+  const [accessToken, setAccessToken] = useState(() => storageUtils.getAccessToken());
+  const [user, setUser] = useState(() => storageUtils.getUser());
+  const [loading, setLoading] = useState(true);
 
-  /**
-   * Indicates whether a user is currently authenticated.
-   */
   const isAuthenticated = !!accessToken;
 
-  /**
-   * Authenticates the user and initializes the application session.
-   *
-   * Workflow:
-   * 1. Authenticate the user and receive a JWT.
-   * 2. Store the JWT in localStorage.
-   * 3. Retrieve the authenticated user's profile.
-   * 4. Store the user information in localStorage.
-   * 5. Update the authentication context.
-   *
-   * @param {Object} loginRequest - User login credentials.
-   * @returns {Promise<Object>} Authenticated user's profile.
-   */
   const login = async (loginRequest) => {
     return performLogin(authService.login, loginRequest);
   };
 
-  /**
-   * Authenticates a staff member (Officer, Department Manager, Admin).
-   * Mirrors login() exactly, just against the staff-only backend endpoint.
-   */
   const loginAsStaff = async (loginRequest) => {
     return performLogin(authService.staffLogin, loginRequest);
   };
@@ -45,18 +27,17 @@ export const AuthProvider = ({ children }) => {
     try {
       const loginResponse = await authenticateFn(loginRequest);
 
-      const accessToken = loginResponse.accessToken;
+      const nextAccessToken = loginResponse.accessToken;
 
-      storageUtils.setAccessToken(accessToken);
+      storageUtils.setAccessToken(nextAccessToken);
+      setAccessToken(nextAccessToken);
 
-      const user = await userService.getProfile();
+      const nextUser = await userService.getProfile();
 
-      storageUtils.setUser(user);
+      storageUtils.setUser(nextUser);
+      setUser(nextUser);
 
-      setAccessToken(accessToken);
-      setUser(user);
-
-      return user;
+      return nextUser;
     } catch (error) {
       storageUtils.clearStorage();
 
@@ -67,33 +48,28 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  /**
-   * Initializes the authentication state when the application starts.
-   *
-   * Workflow:
-   * 1. Retrieve the stored JWT from localStorage.
-   * 2. If no JWT exists, keep the user logged out.
-   * 3. Validate the JWT by requesting the authenticated user's profile.
-   * 4. Restore the authentication context if the token is valid.
-   * 5. Clear the session if the token is invalid or expired.
-   */
   const initializeAuth = async () => {
     try {
-      const accessToken = storageUtils.getAccessToken();
+      const storedToken = storageUtils.getAccessToken();
 
-      // No previous session found
-      if (!accessToken) {
+      if (!storedToken) {
+        setAccessToken(null);
+        setUser(null);
         return;
       }
 
-      // Validate the stored token by retrieving the current user's profile
-      const user = await userService.getProfile();
+      setAccessToken(storedToken);
 
-      // Restore authentication state
-      setAccessToken(accessToken);
-      setUser(user);
+      const cachedUser = storageUtils.getUser();
+      if (cachedUser) {
+        setUser(cachedUser);
+      }
+
+      const freshUser = await userService.getProfile();
+
+      storageUtils.setUser(freshUser);
+      setUser(freshUser);
     } catch (error) {
-      // Stored token is invalid or expired
       storageUtils.clearStorage();
 
       setAccessToken(null);
@@ -107,29 +83,10 @@ export const AuthProvider = ({ children }) => {
     initializeAuth();
   }, []);
 
-  /**
-   * Terminates the current user session.
-   *
-   * Removes all authentication-related data from browser storage
-   * and resets the authentication context.
-   */
-  /**
-   * Registers a new citizen account.
-   *
-   * Registration does not authenticate the user automatically — the caller
-   * is expected to redirect to the login page afterwards.
-   *
-   * @param {Object} registerRequest - New citizen's registration details.
-   * @returns {Promise<Object>} Newly created user profile.
-   */
   const register = async (registerRequest) => {
     return await userService.register(registerRequest);
   };
 
-  /**
-   * Reload the authenticated user's profile.
-   * Used after updating profile information.
-   */
   const refreshUser = async () => {
     try {
       const updatedUser = await userService.getProfile();
@@ -145,10 +102,8 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = () => {
-    // Remove authentication data from browser storage
     storageUtils.clearStorage();
 
-    // Reset authentication context
     setAccessToken(null);
     setUser(null);
   };

@@ -4,7 +4,7 @@ import { AnimatePresence, motion } from "framer-motion";
 
 import Icon from "@/assets/icons/citypulse-ai-icon.png";
 import useAuth from "@/hooks/useAuth";
-import { ROLES } from "@/constants/roles";
+import { ROLES, ROLE_DASHBOARD_PATH } from "@/constants/roles";
 import SidebarItem from "./SidebarItem";
 import {
   citizenMenu,
@@ -43,6 +43,8 @@ const Sidebar = ({ open, onClose, collapsed }) => {
     title: "Citizen Portal",
   };
 
+  const homePath = ROLE_DASHBOARD_PATH[user?.role] ?? "/citizen/dashboard";
+
   const sidebarContent = (
     <aside
       className={`relative flex h-full flex-col overflow-hidden border-r border-slate-200 bg-surface transition-[width] duration-300 ease-out ${
@@ -56,7 +58,8 @@ const Sidebar = ({ open, onClose, collapsed }) => {
         }`}
       >
         <NavLink
-          to="/"
+          to={homePath}
+          end
           className={`flex min-w-0 items-center ${
             collapsed ? "justify-center" : "gap-3"
           }`}

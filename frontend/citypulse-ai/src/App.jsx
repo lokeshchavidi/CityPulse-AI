@@ -3,9 +3,11 @@ import { Toaster } from "react-hot-toast";
 import AppRoutes from "@/routes/AppRoutes";
 import ScrollToTop from "@/components/common/Scroll/ScrollToTop";
 import useTheme from "@/hooks/useTheme";
+import useAuthBackGuard from "@/hooks/useAuthBackGuard";
 
 const App = () => {
   const { isDark } = useTheme();
+  useAuthBackGuard();
 
   return (
     <>

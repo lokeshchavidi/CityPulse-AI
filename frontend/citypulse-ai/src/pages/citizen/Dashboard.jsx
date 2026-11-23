@@ -41,20 +41,26 @@ const Dashboard = () => {
     try {
       setLoading(true);
 
-      const [dashboardResponse, complaintsResponse, statisticsResponse] =
-        await Promise.all([
-          userService.getDashboard(),
-          complaintService.getMyComplaints(),
-          userService.getStatistics(),
-        ]);
+      // Load the primary panels first so the page becomes usable quickly.
+      // Charts can arrive a moment later without blocking the shell.
+      const [dashboardResponse, complaintsResponse] = await Promise.all([
+        userService.getDashboard(),
+        complaintService.getMyComplaints(),
+      ]);
 
       setDashboard(dashboardResponse);
       setComplaints(complaintsResponse ?? []);
-      setStatistics(statisticsResponse ?? emptyStatistics);
     } catch (error) {
       console.error(error);
     } finally {
       setLoading(false);
+    }
+
+    try {
+      const statisticsResponse = await userService.getStatistics();
+      setStatistics(statisticsResponse ?? emptyStatistics);
+    } catch (error) {
+      console.error(error);
     }
   };
 

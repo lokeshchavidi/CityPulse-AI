@@ -6,8 +6,8 @@ const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, loading } = useAuth();
   const location = useLocation();
 
-  // Wait until authentication initialization completes
-  if (loading) {
+  // Only block the shell when we have no cached session to show.
+  if (loading && !isAuthenticated) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-slate-50">
         <div className="flex flex-col items-center gap-4">
@@ -18,12 +18,10 @@ const ProtectedRoute = ({ children }) => {
     );
   }
 
-  // User is not authenticated
   if (!isAuthenticated) {
     return <Navigate to="/login" replace state={{ from: location }} />;
   }
 
-  // User is authenticated
   return children;
 };
 
