@@ -29,7 +29,15 @@ public class SecretEnvironmentPostProcessor implements EnvironmentPostProcessor,
 	@Override
 	public void postProcessEnvironment(ConfigurableEnvironment environment, SpringApplication application) {
 		Map<String, Object> mapped = new LinkedHashMap<>();
-		copyEnv(mapped, "GOOGLE_GENAI_API_KEY", "spring.ai.google.genai.api-key");
+
+		// Only set Gemini if Spring has not already received a key via
+		// SPRING_AI_GOOGLE_GENAI_API_KEY (relaxed binding).
+		if (!hasText(environment.getProperty("spring.ai.google.genai.api-key"))) {
+			copyEnv(mapped, "GOOGLE_GENAI_API_KEY", "spring.ai.google.genai.api-key");
+			copyEnv(mapped, "GEMINI_API_KEY", "spring.ai.google.genai.api-key");
+			copyEnv(mapped, "GOOGLE_API_KEY", "spring.ai.google.genai.api-key");
+		}
+
 		copyEnv(mapped, "JWT_SECRET", "jwt.secret");
 		copyEnv(mapped, "CLOUDINARY_CLOUD_NAME", "cloudinary.cloud-name");
 		copyEnv(mapped, "CLOUDINARY_API_KEY", "cloudinary.api-key");
@@ -40,7 +48,15 @@ public class SecretEnvironmentPostProcessor implements EnvironmentPostProcessor,
 		}
 	}
 
+	private static boolean hasText(String value) {
+		return value != null && !value.isBlank() && !value.startsWith("${");
+	}
+
 	private static void copyEnv(Map<String, Object> target, String envName, String propertyName) {
+		if (target.containsKey(propertyName)) {
+			return;
+		}
+
 		String value = System.getenv(envName);
 		if (value == null || value.isBlank()) {
 			return;
