@@ -53,6 +53,10 @@ const LoginForm = ({
   };
 
   const resolveErrorMessage = (err) => {
+    if (err?.code === "ECONNABORTED") {
+      return "Server is waking up (this can take 1–3 minutes on free hosting). Open the backend health link, wait until it shows UP, then try login again.";
+    }
+
     if (!err?.response) {
       return "Unable to reach the server. Please check your connection and try again.";
     }

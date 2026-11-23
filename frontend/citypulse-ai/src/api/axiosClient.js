@@ -5,7 +5,8 @@ import API_ENDPOINTS from "@/api/endpoints";
 
 const axiosClient = axios.create({
   baseURL: ENV.API_BASE_URL,
-  timeout: 15000,
+  // Render free tier can take several minutes to wake from sleep.
+  timeout: 180000,
 });
 
 // Attach JWT token to every request
