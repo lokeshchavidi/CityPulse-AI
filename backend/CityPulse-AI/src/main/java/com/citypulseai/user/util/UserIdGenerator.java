@@ -1,12 +1,12 @@
 package com.citypulseai.user.util;
 
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.citypulseai.user.entity.UserSequence;
 import com.citypulseai.user.repository.UserRepository;
 import com.citypulseai.user.repository.UserSequenceRepository;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Component
@@ -23,11 +23,16 @@ public class UserIdGenerator {
 				.orElseThrow(() -> new IllegalStateException("User sequence is not initialized."));
 
 		Long currentSequence = userSequence.getNextValue();
-		String userId;
+		if (currentSequence == null || currentSequence < 1L) {
+			currentSequence = 1L;
+		}
 
-		// Skip IDs that already exist when the sequence row was reset or
-		// recreated while users remained (common after a fresh deploy against
-		// an existing MySQL database).
+		Long maxExisting = userRepository.findMaxUserSequenceValue();
+		if (maxExisting != null && maxExisting >= currentSequence) {
+			currentSequence = maxExisting + 1L;
+		}
+
+		String userId;
 		do {
 			userId = "USR-" + String.format("%03d", currentSequence);
 			currentSequence++;

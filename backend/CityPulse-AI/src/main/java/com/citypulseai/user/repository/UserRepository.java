@@ -37,6 +37,13 @@ public interface UserRepository extends JpaRepository<User, Long>{
 	List<User> findByRole_RoleType(RoleType roleType);
 	
 	boolean existsByUserId(String userId);
+
+	@Query(value = """
+			SELECT MAX(CAST(SUBSTRING(user_id, 5) AS UNSIGNED))
+			FROM users
+			WHERE user_id LIKE 'USR-%'
+			""", nativeQuery = true)
+	Long findMaxUserSequenceValue();
 	
 	List<User> findByRole_RoleTypeAndDepartment(
 	        RoleType roleType,

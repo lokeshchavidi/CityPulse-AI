@@ -3,6 +3,7 @@ package com.citypulseai.common.exception;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -29,6 +30,7 @@ import com.citypulseai.department.exception.DepartmentNotFoundException;
 import com.citypulseai.department.exception.DepartmentAlreadyExistsException;
 import com.citypulseai.departmentmanager.exception.InvalidComplaintStateException;
 import com.citypulseai.notification.exception.NotificationNotFoundException;
+import com.citypulseai.role.exception.RoleNotFoundException;
 import com.citypulseai.user.exception.DepartmentManagerAlreadyExistsException;
 import com.citypulseai.user.exception.EmailAlreadyExistsException;
 import com.citypulseai.user.exception.InvalidPasswordException;
@@ -129,6 +131,33 @@ public class GlobalExceptionHandler {
 				.body(validationErrorResponse);
 	}
 	
+	@ExceptionHandler(RoleNotFoundException.class)
+	public ResponseEntity<ErrorResponse> handleRoleNotFoundException(RoleNotFoundException ex) {
+
+		ErrorResponse errorResponse = ErrorResponse.builder()
+				.success(false)
+				.message(ex.getMessage())
+				.timestamp(LocalDateTime.now())
+				.build();
+
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+				.body(errorResponse);
+	}
+
+	@ExceptionHandler(DataIntegrityViolationException.class)
+	public ResponseEntity<ErrorResponse> handleDataIntegrityViolationException(
+			DataIntegrityViolationException ex) {
+
+		ErrorResponse errorResponse = ErrorResponse.builder()
+				.success(false)
+				.message("Could not save the account because of a data conflict. Try a different email or phone number.")
+				.timestamp(LocalDateTime.now())
+				.build();
+
+		return ResponseEntity.status(HttpStatus.CONFLICT)
+				.body(errorResponse);
+	}
+
 	@ExceptionHandler(EmailAlreadyExistsException.class)
 	public ResponseEntity<ErrorResponse> handleEmailAlreadyException(EmailAlreadyExistsException ex) {
 		

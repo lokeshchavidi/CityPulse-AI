@@ -58,9 +58,20 @@ public class UserServiceImpl implements UserService{
 		
 		User user = userMapper.toEntity(request, userId, encodedPassword, citizenRole, null);
 		
-		User savedUser = userRepository.save(user);
-		
-		return userMapper.toResponse(savedUser);
+		User savedUser = userRepository.saveAndFlush(user);
+
+		// Build the response from known values so a lazy Role proxy cannot
+		// fail after flush when open-in-view is disabled.
+		return RegisterUserResponse.builder()
+				.userId(savedUser.getUserId())
+				.firstName(savedUser.getFirstName())
+				.lastName(savedUser.getLastName())
+				.email(savedUser.getEmail())
+				.phoneNumber(savedUser.getPhoneNumber())
+				.role(RoleType.CITIZEN.name())
+				.department(null)
+				.enabled(savedUser.isEnabled())
+				.build();
 	}
 
 	@Override
